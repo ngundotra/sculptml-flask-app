@@ -1,48 +1,42 @@
-from abc import ABC, abstractmethod, abstractclassmethod
-import torch
+from abc import ABC, abstractmethod
+import tensorflow as tf
+from tensorflow import keras
+from keras.layers import InputLayer, Dense, Reshape, Conv2D, Flatten
+
 
 class SPModelLayer(ABC):
     """
-    Sets up basic functions all layers should have.
-    Each layer should really be its own PyTorch Model.
-    It's nice because we can set up our own defaults, customize layer implementations, and then implement new layers
-    when necessary. Also cool because we can use this modular approach to do transfer learning, I think...
+    Maybe extend(?) Idk
     """
-    @abstractclassmethod
-    def make_layer(self, json_dict):
-        pass
+    @classmethod
+    def make(cls, json_dict):
+        return cls.__init__(json_dict)
 
-    @abstractmethod
-    def get_output_shape(self):
-        pass
 
-    @abstractmethod
-    def get_input_shape(self):
-        pass
-
-class InputShape:
+def parse_tuple(str_tup):
     """
-    For interpolating between layers :/
+    Parses a string like '(1, 2, 3)' into actual tuple containing (1, 2, 3)
+    ...does not work on negative numbers...
     """
+    vec = []
+    curr_num = 0
+    for c in str_tup:
+        if '0' <= c <= '9':
+            curr_num *= 10
+            curr_num += int(c)
+        if c == ',' or c == ')':
+            vec.append(curr_num)
+            curr_num = 0
+    return tuple(vec)
 
-    def __init__(self, dict):
-        self.d0 = dict['d0']
-        self.d1 = dict['d1']
-        self.d2 = dict['d2']
 
-    def __iter__(self):
-        return iter([self.d0, self.d1, self.d2])
-
-    def __repr__(self):
-        return 'shape: ({}, {}, {})'.format(self.d0, self.d1, self.d2)
-
-    def __eq__(self, other):
-        if isinstance(other, InputShape):
-            return self.d0 == other.d0 and self.d1 == other.d1 and self.d2 == other.d2
-        return False
-
-    def __copy__(self):
-        return InputShape({'d0': self.d0, 'd1': self.d1, 'd2': self.d2})
+def shrink_tuple(vec):
+    """Gets rid of leftmost elements <= 0"""
+    shrunk = []
+    for elm in vec:
+        if elm > 0:
+            shrunk.append(elm)
+    return shrunk
 
 
 class InputLayer(SPModelLayer):
@@ -51,31 +45,35 @@ class InputLayer(SPModelLayer):
     add tests to ensure that data is being transferred properly between modular pieces...
     """
 
-    def __init__(self, in_dict):
-        self.input_shape = InputShape(in_dict)
-
-    @classmethod
-    def make_layer(cls, json_dict):
-        return InputLayer(json_dict)
-
-    def get_input_shape(self):
-        return self.input_shape
-
-    def get_output_shape(self):
-        return self.get_input_shape()
+    def __init__(self, model_spec):
+        layer_shape = model_spec['dim']
+        if len(layer_shape) < 3:
+            raise ValueError("Dim passed had < 3 fields. We expect 3")
+        layer_shape = parse_tuple(layer_shape)
+        layer_shape = shrink_tuple(layer_shape)
+        self.model_spec = model_spec
+        self.layer_shape = layer_shape
+        self.layer = InputLayer(input_shape=(layer_shape))
 
 
-class DenseLayer(SPModelLayer, torch.nn.Module):
+class DenseLyr(SPModelLayer):
+    def __init__(self, model_spec):
+        self.model_spec = model_spec
+        self.units = model_spec['units']
+        self.layer = Dense(self.units, activation=model_spec['activation'])
 
-    def __init__(self, params):
-        torch.nn.Module.__init__(self)
-        self.in_shape = ['']
-        self.units = params['units']
-        self.layer = torch.nn.Linear( )
 
-    @classmethod
-    def make_layer(self, json_dict):
-        return DenseLayer(json_dict)
+class ReshapeLyr(SPModelLayer):
+    def __init__(self, model_spec):
+        layer_shape = model_spec['dim']
+        if len(layer_shape):
+            raise ValueError("Expect dim to be = 3")
+        self.layer_shape = shrink_tuple(parse_tuple(layer_shape))
+        self.model_spec = model_spec
+        self.layer = Reshape(self.layer_shape)
 
-    def get_input_shape(self):
-        return
+
+class FlattenLyr(SPModelLayer):
+    def __init__(self, model_spec):
+        self.model_spec = model_spec
+        self.layer = Flatten()
