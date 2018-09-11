@@ -1,0 +1,13 @@
+{
+  "__info__": "Used to check the dimension of the input shape works out",
+  "model_name": "Test-Input",
+  "num_layers": 1,
+  "loss": "mse",
+  "optimizer": "rmsprop",
+  "input_layer": {
+    "dim": "(6, 9)"
+  },
+  "layer_0": {
+    "layer": "FlattenLyr"
+  }
+}

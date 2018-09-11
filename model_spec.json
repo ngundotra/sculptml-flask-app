@@ -1,6 +1,15 @@
 {
-  "num_layers": 10,
+  "__info__": "This is a JSON file used for testing the model creation process",
+  "model_name": "Test-v0",
+  "num_layers": 1,
+  "loss": "mse",
+  "optimizer": "rmsprop",
   "input_layer": {
-    ...
+    "dim": "(6, 6, 6)"
+  },
+  "layer_0": {
+    "layer": "DenseLyr",
+    "units": 128,
+    "activation": "relu"
   }
 }

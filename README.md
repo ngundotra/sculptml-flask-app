@@ -19,3 +19,15 @@ For ML building + training + compiling: Python (TF) + shell code for compiling t
 For CoreML transfer: Scala's Akka or something which takes into account a phone's limited ability to read in a CoreML model.
 __(Note that this part of the framework depends on the Cocoapods available to handle this)__
 
+
+## ML Model Building + Training
+
+Python file should take in a JSON file location as an argument. There should be some 2-step process by which the Python app can communicate that 
+1) the model was built successfully, and 
+2) the model is done training, and 3) the model has been compiled.
+
+For now, we can just flush these updates to the stdout, and try to compress everything into 1 process.
+
+## Model Transferring
+
+We should see if there are any cocoapods that do this...

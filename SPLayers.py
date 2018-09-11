@@ -1,16 +1,13 @@
 from abc import ABC, abstractmethod
 import tensorflow as tf
 from tensorflow import keras
-from keras.layers import InputLayer, Dense, Reshape, Conv2D, Flatten
+from keras.layers import Input, Dense, Reshape, Conv2D, Flatten
 
 
 class SPModelLayer(ABC):
     """
     Maybe extend(?) Idk
     """
-    @classmethod
-    def make(cls, json_dict):
-        return cls.__init__(json_dict)
 
 
 def parse_tuple(str_tup):
@@ -39,7 +36,7 @@ def shrink_tuple(vec):
     return shrunk
 
 
-class InputLayer(SPModelLayer):
+class InputLyr(SPModelLayer):
     """
     Dummy class. Used to verify that datasets & transfer models agree on input shapes. Probably a good place to
     add tests to ensure that data is being transferred properly between modular pieces...
@@ -53,7 +50,7 @@ class InputLayer(SPModelLayer):
         layer_shape = shrink_tuple(layer_shape)
         self.model_spec = model_spec
         self.layer_shape = layer_shape
-        self.layer = InputLayer(input_shape=(layer_shape))
+        self.layer = Input(layer_shape)
 
 
 class DenseLyr(SPModelLayer):
