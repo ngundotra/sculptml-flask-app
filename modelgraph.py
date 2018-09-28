@@ -4,8 +4,7 @@ Supports training on our custom "Datasets"
 Check `main.py` for usage cases.
 """
 from SPLayers import DenseLyr, FlattenLyr, ReshapeLyr, InputLyr
-from tensorflow import keras
-from keras import Sequential, Model
+from tensorflow.keras import Sequential, Model
 
 CLASS_NAME = {
     'DenseLyr': DenseLyr,

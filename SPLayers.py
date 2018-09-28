@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import tensorflow as tf
 from tensorflow import keras
-from keras.layers import Input, Dense, Reshape, Conv2D, Flatten
+from tensorflow.keras.layers import Input, Dense, Reshape, Conv2D, Flatten
 
 
 class SPModelLayer(ABC):
