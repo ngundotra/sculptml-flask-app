@@ -38,6 +38,7 @@ class ModelGraph(object):
         for i in range(self.num_layers):
             curr_layer_spec = self.spec_dict['layer_{}'.format(i)]
             layer_cls = CLASS_NAME[curr_layer_spec['layer']]
+            #calls SP mode layer class on current layer spec
             new_layer = layer_cls(curr_layer_spec)
             self.layers.append(new_layer)
 

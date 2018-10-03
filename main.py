@@ -35,7 +35,9 @@ def train_model(mg, spec_dict):
 
 if __name__ == '__main__':
     print("Retrieving json...")
-    model_spec = get_json(sys.argv[1])
+    json_spec = "model_spec.json"
+#    model_spec = get_json(sys.argv[1])
+    model_spec = get_json(json_spec)
     print(model_spec)
     print("Creating the model...")
     model = make_model(model_spec)
