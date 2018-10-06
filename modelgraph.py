@@ -3,15 +3,18 @@ Parses a JSON spec file for model creation.
 Supports training on our custom "Datasets"
 Check `main.py` for usage cases.
 """
-from SPLayers import DenseLyr, FlattenLyr, ReshapeLyr, InputLyr
-from tensorflow.keras import Sequential, Model
+from SPLayers import DenseLyr, FlattenLyr, ReshapeLyr, InputLyr, Conv2DLyr, MaxPooling2DLyr, DropoutLyr
+
+from keras import Sequential, Model
 
 CLASS_NAME = {
     'DenseLyr': DenseLyr,
-    # ConvLyr: 'ConvLyr',
+    'Conv2DLyr': Conv2DLyr,
     'FlattenLyr': FlattenLyr,
     'ReshapeLyr':ReshapeLyr,
-    'InputLyr': InputLyr
+    'InputLyr': InputLyr,
+    'MaxPooling2DLyr': MaxPooling2DLyr,
+    'DropoutLyr': DropoutLyr
     }
 
 
@@ -38,6 +41,7 @@ class ModelGraph(object):
         for i in range(self.num_layers):
             curr_layer_spec = self.spec_dict['layer_{}'.format(i)]
             layer_cls = CLASS_NAME[curr_layer_spec['layer']]
+            #print(curr_layer_spec)
             #calls SP mode layer class on current layer spec
             new_layer = layer_cls(curr_layer_spec)
             self.layers.append(new_layer)

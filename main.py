@@ -35,7 +35,7 @@ def train_model(mg, spec_dict):
 
 if __name__ == '__main__':
     print("Retrieving json...")
-    json_spec = "model_spec.json"
+    json_spec = "mnist_cnn.json"
 #    model_spec = get_json(sys.argv[1])
     model_spec = get_json(json_spec)
     print(model_spec)

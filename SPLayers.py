@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras.layers import Input, Dense, Reshape, Conv2D, Flatten, MaxPooling2D, Dropout
+from keras.layers import Input, Dense, Reshape, Conv2D, Flatten, MaxPooling2D, Dropout
 
 
 class SPModelLayer(ABC):
@@ -80,14 +80,14 @@ class Conv2DLyr(SPModelLayer):
    def __init__(self, model_spec):
         self.model_spec = model_spec
         self.filters = model_spec['filters']
-        self.kernel_size = model_spec['kernel_size']
-        self.activation = model_spec['relu']
+        self.kernel_size = parse_tuple(model_spec['kernel_size'])
+        self.activation = model_spec['activation']
         self.layer = Conv2D(filters=self.filters, kernel_size=self.kernel_size, activation=self.activation)
         
 class MaxPooling2DLyr(SPModelLayer):
     def __init__(self, model_spec):
         self.model_spec = model_spec
-        self.pool_size = model_spec['pool_size']
+        self.pool_size = parse_tuple(model_spec['pool_size'])
         self.layer = MaxPooling2D(pool_size=self.pool_size)
 
 class DropoutLyr(SPModelLayer):

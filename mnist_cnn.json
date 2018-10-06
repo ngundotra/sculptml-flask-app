@@ -1,0 +1,48 @@
+{
+    "__info__": "Mnist CNN model from keras-team examples",
+    "model_name": "simple CNN",
+    "num_layers": 5,
+    "loss" : "categorial_crossentropy",
+    "optimizer": "Adadelta",
+    "input_layer": {
+        "dim": "(28, 28, 1)"
+    },
+    "layer_0": {
+        "layer": "Conv2DLyr",
+        "filters": 32,
+        "kernel_size": "(3,3)",
+        "activation": "relu",
+        "input_shape": "(28,28,1)"
+    },
+    "layer_1": {
+        "layer": "Conv2DLyr",
+        "filters": 64,
+        "kernel_size": "(3,3)",
+        "activation": "relu"
+    },
+    "layer_2": {
+        "layer": "MaxPooling2DLyr",
+        "pool_size" : "(2,2)"
+    },
+    "layer_3": {
+        "layer": "DropoutLyr",
+        "rate": 0.25
+    },
+    "layer_4": {
+        "layer":"FlattenLyr"
+    },
+    "layer_5": {
+        "layer": "DenseLyr",
+        "units": 128,
+        "activation": "relu"
+    },
+    "layer_6": {
+        "layer": "DropoutLyr",
+        "rate": 0.5
+    },
+    "layer_7": {
+        "layer": "DenseLyr",
+        "units": "num_classes",
+        "activation":"softmax"
+    }
+}
