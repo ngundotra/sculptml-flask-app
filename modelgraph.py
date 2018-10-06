@@ -3,12 +3,15 @@ Parses a JSON spec file for model creation.
 Supports training on our custom "Datasets"
 Check `main.py` for usage cases.
 """
-from SPLayers import DenseLyr, FlattenLyr, ReshapeLyr, InputLyr
+from SPLayers import (DenseLyr, FlattenLyr, ReshapeLyr, InputLyr, Conv2DLyr, DropoutLyr,
+                        MaxPooling2DLyr)
 from tensorflow.keras import Sequential, Model
 
 CLASS_NAME = {
     'DenseLyr': DenseLyr,
-    # ConvLyr: 'ConvLyr',
+    'Conv2DLyr': Conv2DLyr,
+    'MaxPooling2DLyr': MaxPooling2DLyr,
+    'DropoutLyr': DropoutLyr,
     'FlattenLyr': FlattenLyr,
     'ReshapeLyr':ReshapeLyr,
     'InputLyr': InputLyr
