@@ -1,7 +1,16 @@
 from abc import ABC, abstractmethod
 import tensorflow as tf
 from tensorflow import keras
-from keras.layers import Input, Dense, Reshape, Conv2D, Flatten, MaxPooling2D, Dropout
+from tensorflow.keras.layers import ( 
+    Input, 
+    InputLayer,
+    Dense, 
+    Reshape, 
+    Conv2D, 
+    Flatten, 
+    MaxPooling2D, 
+    Dropout
+)
 
 
 class SPModelLayer(ABC):
@@ -51,6 +60,8 @@ class InputLyr(SPModelLayer):
         self.model_spec = model_spec
         self.layer_shape = layer_shape
         self.layer = Input(layer_shape)
+        #extra input layer for compose_model2
+        self.input_layer = InputLayer(layer_shape)
 
 
 class DenseLyr(SPModelLayer):

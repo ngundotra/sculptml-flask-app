@@ -5,7 +5,7 @@ Check `main.py` for usage cases.
 """
 from SPLayers import DenseLyr, FlattenLyr, ReshapeLyr, InputLyr, Conv2DLyr, MaxPooling2DLyr, DropoutLyr
 #from tensorflow.keras 
-from keras import Sequential, Model
+from tensorflow.keras import Sequential, Model
 
 CLASS_NAME = {
     'DenseLyr': DenseLyr,
@@ -26,7 +26,7 @@ class ModelGraph(object):
         self.name = spec_dict['model_name']
         self.num_layers = spec_dict['num_layers']
         self._create_layers()
-        self._compose_model()
+        self._compose_model2()
         self._compile_model()
 
     def _create_layers(self):
@@ -42,20 +42,36 @@ class ModelGraph(object):
             curr_layer_spec = self.spec_dict['layer_{}'.format(i)]
             layer_cls = CLASS_NAME[curr_layer_spec['layer']]
             #print(curr_layer_spec)
-            #calls SP mode layer class on current layer spec
+            #calls SPLayer classes on current layer spec
             new_layer = layer_cls(curr_layer_spec)
             self.layers.append(new_layer)
+            #appends instances of each SPlayer class
 
     def _compose_model(self):
         """
         Strings the layers together into an actual keras model
         """
+        #Input class
         self.model = self.input_layer.layer
         # Stacks the layers together
         for layer in self.layers:
             # Access the Keras layer portion of our custom SPLayers
             self.model = layer.layer(self.model)
+            print(self.model)
             self.model = Model(self.input_layer.layer, self.model)
+
+    def _compose_model2(self):
+        """
+        Strings the layers together into an actual keras model
+        alternate approach
+        """
+        #start off model, possibly alter the type of model in the future
+        self.model = Sequential()
+        self.model.add(self.input_layer.input_layer)
+
+        for layer in self.layers:
+            self.model.add(layer.layer)
+
 
     def _compile_model(self):
         """
