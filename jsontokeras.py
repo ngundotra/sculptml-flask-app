@@ -27,13 +27,13 @@ def main():
   estimator.fit(X,Y)
   
   # Right now just predict on the trained data (accuracy metrics should match)
-  predictions = estimator.predict(X) 
+  predictions = estimator.predict(X)
 
   accuracy = 0
   for i in range(0, len(Y)):
     if (predictions[i] == Y[i]):
       accuracy += 1
-      
+
   accuracy = accuracy / len(Y)
 
   print(accuracy)
