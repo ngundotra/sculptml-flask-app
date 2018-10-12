@@ -1,0 +1,37 @@
+from abc import ABC
+
+
+def get_dataset(data_json):
+    # Uses the dataset name from JSON file to return proper dataset
+    if data_json["name"] == "iris":
+        return IrisDataset(data_json)
+    if data_json["name"] == "circles":
+        return CirclesDataset(data_json)
+
+
+class Dataset(ABC):
+
+    def __init__(self, data_json):
+        self.name = data_json["name"]
+        self.batch_size = None  # Scalar
+        self.input_shape = None  # Tuple
+        self.loss = None  # String that describes the Keras loss function e.g. "mse"
+        self.metrics = ["accuracy"]  # List of Keras strings for metrics
+        self.train_data = None  # Should be a numpy array
+        self.train_labels = None  # Should be a numpy array
+
+class IrisDataset(Dataset):
+
+    def __init__(self, data_json):
+        Dataset.__init__(data_json)
+        # Parse your options from data_json
+        # Do any loading that needs to be done here
+
+class CirclesDataset(Dataset):
+
+    def __init__(self, data_json):
+        Dataset.__init__(data_json)
+        # Parse your options from data_json
+        # Do any loading that needs to be done here
+
+

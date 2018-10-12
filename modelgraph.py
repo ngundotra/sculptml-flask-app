@@ -6,6 +6,7 @@ Check `main.py` for usage cases.
 from SPLayers import DenseLyr, FlattenLyr, ReshapeLyr, InputLyr, Conv2DLyr, MaxPooling2DLyr, DropoutLyr
 #from tensorflow.keras 
 from tensorflow.keras import Sequential, Model
+from datasets import Dataset
 
 CLASS_NAME = {
     'DenseLyr': DenseLyr,
@@ -27,7 +28,6 @@ class ModelGraph(object):
         self.num_layers = spec_dict['num_layers']
         self._create_layers()
         self._compose_model2()
-        self._compile_model()
 
     def _create_layers(self):
         """
@@ -73,15 +73,36 @@ class ModelGraph(object):
             self.model.add(layer.layer)
 
 
-    def _compile_model(self):
+    def _compile_model(self, dataset):
         """
-        Compiles the model with a loss metric, though we could probably just strip the graph from
-        the tf.Session.... so I don't know if this is necessary, (esp in long run, with customizable
-        models)
+        Compiles the model using the specified dataset with a loss metric and
+        verifies that input and output shapes match
         """
-        self.loss = self.spec_dict['loss']
+        if not isinstance(dataset, Dataset):
+            raise ValueError("Dataset should be one of the Dataset classes")
+        if self.input_layer.layer_shape != dataset.input_shape and self.model.output_shape != dataset.output_shape:
+            raise ValueError("Input or output shapes do not align with input or output shape of dataset")
+
+        self.loss = dataset.loss
         self.opt = self.spec_dict['optimizer']
-        self.metrics = self.spec_dict['metrics']
-        
+        self.metrics = dataset.metrics
+
         self.model.compile(optimizer=self.opt, loss=self.loss, metrics=self.metrics)
+
+    def train_on(self, dataset):
+        """
+        Compiles then trains model on the dataset using the options parsed from the JSON
+        dataset is a Dataset object
+        """
+        self._compile_model(dataset)
+        self.model.fit(dataset.train_data, dataset.train_labels, batch_size=dataset.batch_size, epochs=dataset.epochs)
+        # TODO(Allen): Have this function return a train_acc and test_acc as specified in main.py
+        self.train_acc = None
+        self.test_acc = None
+        return self.train_acc, self.test_acc
+
+    def save(self):
+        # TODO(ramimostafa): Save Keras model to folder with special name and overwrite folder if it exists
+        # TODO(ramimostafa): Also setup self.savedir
+        return None
 
