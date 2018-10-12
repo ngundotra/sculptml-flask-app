@@ -17,9 +17,7 @@ def create_model():
     return model.model
 
 def main():
-  clear_session()
   iris = datasets.load_iris()
-
   X = iris.data
   Y = iris.target
 
@@ -33,7 +31,6 @@ def main():
   for i in range(0, len(Y)):
     if (predictions[i] == Y[i]):
       accuracy += 1
-
   accuracy = accuracy / len(Y)
 
   print(accuracy)

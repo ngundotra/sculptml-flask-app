@@ -62,5 +62,6 @@ class ModelGraph(object):
         self.loss = self.spec_dict['loss']
         self.opt = self.spec_dict['optimizer']
         self.metrics = self.spec_dict['metrics']
+        
         self.model.compile(optimizer=self.opt, loss=self.loss, metrics=self.metrics)
 
