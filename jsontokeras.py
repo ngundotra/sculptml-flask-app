@@ -33,6 +33,7 @@ def main():
   for i in range(0, len(Y)):
     if (predictions[i] == Y[i]):
       accuracy += 1
+      
   accuracy = accuracy / len(Y)
 
   print(accuracy)
