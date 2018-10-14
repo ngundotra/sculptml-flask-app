@@ -60,19 +60,6 @@ class ModelGraph(object):
             print(self.model)
             self.model = Model(self.input_layer.layer, self.model)
 
-<<<<<<< HEAD
-    def _train_on(self, dataset):
-        """
-        Takes in a dataset and trains the model on the dataset (pulled from a dictionary parsed by main)
-        Also compiles together accuracy metrics.
-        """
-        X, Y = dataset.train, dataset.target
-        self.model.fit(X, epochs=dataset.epochs)
-
-        # Compute accuracy
-        predictions = estimator.predict(X)
-        self.train_acc = sum(predictions[i] == Y[i] for i in range(0, len(Y))) / len(Y)
-
     def _compose_model2(self):
         """
         Strings the layers together into an actual keras model

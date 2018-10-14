@@ -21,6 +21,7 @@ class Dataset(ABC):
         self.train_labels = None  # Should be a numpy array
         self.test_data = None # Should be a numpy array
         self.test_labels = None # Should be a numpy array
+        self.data_split = 0.8 # Train/Test split
 
 class IrisDataset(Dataset):
 
@@ -32,11 +33,10 @@ class IrisDataset(Dataset):
         self.input_shape = iris.data.shape
 
         # Split the data into training and testing data
-        # Suggestion: Add a parameter for train/test split?
-        self.train_data = iris.data[:len(iris.data) // 2]
-        self.train_labels = iris.target[:len(iris.target) // 2]
-        self.test_data = iris.data[len(iris.data) // 2 : len(iris.data)]
-        self.test_labels = iris.target[len(iris.target) // 2 : len(iris.target)]
+        self.train_data = iris.data[:int(len(iris.data) * self.data_split)]
+        self.train_labels = iris.target[:int(len(iris.target) * self.data_split)]
+        self.test_data = iris.data[int(len(iris.data) * self.data_split) : len(iris.data)]
+        self.test_labels = iris.target[int(len(iris.target) * self.data_split) : len(iris.target)]
 
 class CirclesDataset(Dataset):
 
