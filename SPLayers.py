@@ -1,14 +1,14 @@
 from abc import ABC, abstractmethod
 import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras.layers import ( 
-    Input, 
+from tensorflow.keras.layers import (
+    Input,
     InputLayer,
-    Dense, 
-    Reshape, 
-    Conv2D, 
-    Flatten, 
-    MaxPooling2D, 
+    Dense,
+    Reshape,
+    Conv2D,
+    Flatten,
+    MaxPooling2D,
     Dropout
 )
 
@@ -96,7 +96,6 @@ class Conv2DLyr(SPModelLayer):
         self.activation = model_spec['activation']
         self.layer = Conv2D(filters=self.filters, kernel_size=self.kernel_size, activation=self.activation)
 
-        
 class MaxPooling2DLyr(SPModelLayer):
     def __init__(self, model_spec):
         self.model_spec = model_spec

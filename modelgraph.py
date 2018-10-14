@@ -4,7 +4,7 @@ Supports training on our custom "Datasets"
 Check `main.py` for usage cases.
 """
 from SPLayers import DenseLyr, FlattenLyr, ReshapeLyr, InputLyr, Conv2DLyr, MaxPooling2DLyr, DropoutLyr
-#from tensorflow.keras 
+# from tensorflow.keras
 from tensorflow.keras import Sequential, Model
 from datasets import Dataset
 
@@ -12,7 +12,7 @@ CLASS_NAME = {
     'DenseLyr': DenseLyr,
     'Conv2DLyr': Conv2DLyr,
     'FlattenLyr': FlattenLyr,
-    'ReshapeLyr':ReshapeLyr,
+    'ReshapeLyr': ReshapeLyr,
     'InputLyr': InputLyr,
     'MaxPooling2DLyr': MaxPooling2DLyr,
     'DropoutLyr': DropoutLyr
@@ -51,7 +51,7 @@ class ModelGraph(object):
         """
         Strings the layers together into an actual keras model
         """
-        #Input class
+        # Input class
         self.model = self.input_layer.layer
         # Stacks the layers together
         for layer in self.layers:
@@ -65,7 +65,7 @@ class ModelGraph(object):
         Strings the layers together into an actual keras model
         alternate approach
         """
-        #start off model, possibly alter the type of model in the future
+        # start off model, possibly alter the type of model in the future
         self.model = Sequential()
         self.model.add(self.input_layer.input_layer)
 
@@ -105,4 +105,3 @@ class ModelGraph(object):
         # TODO(ramimostafa): Save Keras model to folder with special name and overwrite folder if it exists
         # TODO(ramimostafa): Also setup self.savedir
         return None
-
