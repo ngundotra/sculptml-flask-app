@@ -4,7 +4,7 @@ Receives the filename of a JSON specification for building and training an ML mo
 import json
 import sys
 from modelgraph import ModelGraph
-# from datasets import Dataset, get_dataset
+from datasets import get_dataset
 
 
 def get_json(fname):
@@ -33,11 +33,24 @@ def train_model(mg, spec_dict):
     return mg.savedir
 
 
+def main(fname):
+
+    spec = get_json(fname)
+    model = make_model(spec)
+    saveddir = train_model(model, spec)
+    print("Train accuracy is:", model.train_acc)
+    print("Test accuracy is:", model.test_acc)
+
+
 if __name__ == '__main__':
     print("Retrieving json...")
-    model_spec = get_json(sys.argv[1])
-    print(model_spec)
+    #json_spec = "model_spec_alt.json"
+    json_spec = "mnist_cnn.json"
+#    model_spec = get_json(sys.argv[1])
+    model_spec = get_json(json_spec)
+    #print(model_spec)
     print("Creating the model...")
     model = make_model(model_spec)
+    print(model.model.summary())
     print(model.model)
 
