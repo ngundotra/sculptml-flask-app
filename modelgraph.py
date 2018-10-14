@@ -53,6 +53,18 @@ class ModelGraph(object):
             self.model = layer.layer(self.model)
             self.model = Model(self.input_layer.layer, self.model)
 
+    def _train_on(self, dataset):
+        """
+        Takes in a dataset and trains the model on the dataset (pulled from a dictionary parsed by main)
+        Also compiles together accuracy metrics.
+        """
+        X, Y = dataset.train, dataset.target
+        self.model.fit(X, epochs=dataset.epochs)
+
+        # Compute accuracy
+        predictions = estimator.predict(X)
+        self.train_acc = sum(predictions[i] == Y[i] for i in range(0, len(Y))) / len(Y)
+
     def _compile_model(self):
         """
         Compiles the model with a loss metric, though we could probably just strip the graph from
@@ -62,6 +74,6 @@ class ModelGraph(object):
         self.loss = self.spec_dict['loss']
         self.opt = self.spec_dict['optimizer']
         self.metrics = self.spec_dict['metrics']
-        
+
         self.model.compile(optimizer=self.opt, loss=self.loss, metrics=self.metrics)
 
