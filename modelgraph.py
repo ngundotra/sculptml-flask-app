@@ -95,10 +95,10 @@ class ModelGraph(object):
         dataset is a Dataset object
         """
         self._compile_model(dataset)
-        self.model.fit(dataset.train_data, dataset.train_labels, batch_size=dataset.batch_size, epochs=dataset.epochs)
+        hist = self.model.fit(dataset.train_data, dataset.train_labels, batch_size=dataset.batch_size, epochs=dataset.epochs)
         # TODO(Allen): Have this function return a train_acc and test_acc as specified in main.py
-        self.train_acc = None
-        self.test_acc = None
+        self.train_acc = hist.history['accuracy']
+        self.test_acc = model.evaluate(dataset.test_data, dataset.test_labels, verbose=0)[1]
         return self.train_acc, self.test_acc
 
     def save(self):
