@@ -45,7 +45,8 @@ def main(fname):
 if __name__ == '__main__':
     print("Retrieving json...")
     #json_spec = "model_spec_alt.json"
-    json_spec = "mnist_cnn.json"
+    #json_spec = "mnist_cnn.json"
+    json_spec = "iris_spec.json"
 #    model_spec = get_json(sys.argv[1])
     model_spec = get_json(json_spec)
     #print(model_spec)
