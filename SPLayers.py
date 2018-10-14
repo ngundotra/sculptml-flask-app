@@ -9,7 +9,8 @@ from tensorflow.keras.layers import (
     Conv2D,
     Flatten,
     MaxPooling2D,
-    Dropout
+    Dropout,
+    BatchNormalization
 )
 
 
@@ -60,7 +61,7 @@ class InputLyr(SPModelLayer):
         self.model_spec = model_spec
         self.layer_shape = layer_shape
         self.layer = Input(layer_shape)
-        #extra input layer for compose_model2
+        # extra input layer for compose_model2
         self.input_layer = InputLayer(layer_shape)
 
 
@@ -87,20 +88,56 @@ class FlattenLyr(SPModelLayer):
         self.layer = Flatten()
 
 
-#TODO: implement convolutional layer, dropout, and batch normalization
 class Conv2DLyr(SPModelLayer):
     def __init__(self, model_spec):
         self.model_spec = model_spec
         self.filters = model_spec['filters']
         self.kernel_size = parse_tuple(model_spec['kernel_size'])
+        self.strides = model_spec['strides']
+        self.padding = model_spec['padding']
+        self.data_format = model_spec['data_format']
+        self.dilation_rate = parse_tuple(model_spec['dilation_rate'])
         self.activation = model_spec['activation']
-        self.layer = Conv2D(filters=self.filters, kernel_size=self.kernel_size, activation=self.activation)
+        self.use_bias = model_spec['use_bias']
+        self.kernel_initializer = model_spec['kernel_initializer']
+        self.bias_initializer = model_spec['bias_initializer']
+        self.kernel_regularizer = model_spec['kernel_regularizer']
+        self.bias_regularizer = model_spec['bias_regularizer']
+        self.activity_regularizer = model_spec['activity_regularizer']
+        self.kernel_constraint = model_spec['kernel_constraint']
+        self.bias_constraint = model_spec['bias_constraint']
+        self.layer = Conv2D(
+            filters=self.filters,
+            kernel_size=self.kernel_size,
+            strides=self.strides,
+            padding=self.padding,
+            data_format=self.data_format,
+            dilation_rate=self.dilation_rate,
+            activation=self.activation,
+            use_bias=self.use_bias,
+            kernel_initializer=self.kernel_initializer,
+            bias_initializer=self.bias_initializer,
+            kernel_regularizer=self.kernel_regularizer,
+            bias_regularizer=self.bias_regularizer,
+            activity_regularizer=self.activity_regularizer,
+            kernel_constraint=self.kernel_constraint,
+            bias_constraint=self.bias_constraint
+        )
+
 
 class MaxPooling2DLyr(SPModelLayer):
     def __init__(self, model_spec):
         self.model_spec = model_spec
         self.pool_size = parse_tuple(model_spec['pool_size'])
-        self.layer = MaxPooling2D(pool_size=self.pool_size)
+        self.strides = model_spec['strides']
+        self.padding = model_spec['padding']
+        self.data_format = model_spec['data_format']
+        self.layer = MaxPooling2D(
+            pool_size=self.pool_size,
+            strides=self.strides,
+            padding=self.padding,
+            data_format=self.data_format
+        )
 
 
 class DropoutLyr(SPModelLayer):
@@ -108,3 +145,39 @@ class DropoutLyr(SPModelLayer):
         self.model_spec = model_spec
         self.rate = model_spec['rate']
         self.layer = Dropout(rate=self.rate)
+
+
+class BatchNormalizationLyr(SPModelLayer):
+    def __init__(self, model_spec):
+        self.model_spec = model_spec
+        # specifies default argument if argument is not in json spec
+        get_arg = lambda arg, value: model_spec[a] if model_spec.get(a) else v
+
+        self.axis = model_spec['axis'] if model_spec.get('axis') else -1
+        self.momentum = model_spec['momentum'] if model_spec.get('momentum') else 0.99
+        self.epsilon = model_spec['epsilon'] if model_spec.get('epsilon') else 1e-3
+        self.center = model_spec['center'] if model_spec.get('center') else True
+        self.scale = model_spec['scale'] if model_spec.get('scale') else True
+        self.beta_initializer = model_spec['beta_initializer'] if model_spec.get('beta_initializer') else = 'zeros'
+        self.gamma_initializer = model_spec['gamma_initializer'] if model_spec.get('gamma_initializer') else = 'ones'
+        self.moving_mean_initializer = model_spec['moving_mean_initializer'] if model_spec.get('moving_mean')
+        self.moving_variance_initializer = get_arg('moving_variance_initializer', 'zeros')
+        self.beta_regularizer = get_arg('beta_regularizer', None)
+        self.gamma_regularizer = get_arg('gamma_regularizer', None)
+        self.beta_contraint = get_arg('beta_contraint', None)
+        self.gamma_contraint = get_arg('gamma_contraint', None)
+        self.layer = BatchNormalization(
+            axis=self.axis,
+            momentum=self.momentum,
+            epsilon=self.epsilon,
+            center=self.center,
+            scale=self.scale,
+            beta_initializer=self.beta_initializer,
+            gamma_initializer=self.gamma_initializer,
+            moving_mean_initializer=self.moving_mean_initializer,
+            moving_variance_initializer=self.moving_variance_initializer,
+            beta_regularizer=self.beta_regularizer,
+            gamma_regularizer=self.gamma_regularizer,
+            beta_contraint=self.beta_contraint,
+            gamma_constraint=self.gamma_contraint
+        )
