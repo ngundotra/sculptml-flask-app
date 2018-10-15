@@ -27,23 +27,32 @@ _Layers_:
     - `dim` reshape outshape
 - Conv2DLyr
     - NYI (not yet implemented)
-
+    - See implementation in `SPLayers.py`
+    
 Example:
 
 ```
 {
   "__info__": "This is a JSON file used for testing the model creation process",
-  "model_name": "Test-v0",
-  "num_layers": 1,
-  "loss": "binary_crossentropy",
-  "optimizer": "rmsprop",
-  "input_layer": {
-    "dim": "(6, 6, 6)"
-  },
-  "layer_0": {
-    "layer": "DenseLyr",
-    "units": 128,
-    "activation": "relu"
+  "model": {
+      "model_name": "Test-v0", # Required
+      "num_layers": 1, # Required
+      "optimizer": "rmsprop",
+      "input_layer": {
+        "dim": "(6, 6, 6)"
+      },
+      "layer_0": {
+        "layer": "DenseLyr",
+        "units": 128,
+        "activation": "relu"
+      }
+      # other layers here...
+  }
+  "dataset": {
+       "name": "Circles", # Required
+       "data_split": 0.8, # Default, not required
+       "inner_radius": 10,
+       "num_samples": 1000
   }
 }
 ```
