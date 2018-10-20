@@ -3,8 +3,15 @@ Parses a JSON spec file for model creation.
 Supports training on our custom "Datasets"
 Check `main.py` for usage cases.
 """
-from SPLayers import DenseLyr, FlattenLyr, ReshapeLyr, InputLyr, Conv2DLyr, MaxPooling2DLyr, DropoutLyr
-#from tensorflow.keras 
+from SPLayers import (
+    DenseLyr,
+    FlattenLyr,
+    ReshapeLyr,
+    InputLyr,
+    Conv2DLyr,
+    MaxPooling2DLyr,
+    DropoutLyr)
+# from tensorflow.keras
 from tensorflow.keras import Sequential, Model
 from datasets import Dataset
 
@@ -12,11 +19,11 @@ CLASS_NAME = {
     'DenseLyr': DenseLyr,
     'Conv2DLyr': Conv2DLyr,
     'FlattenLyr': FlattenLyr,
-    'ReshapeLyr':ReshapeLyr,
+    'ReshapeLyr': ReshapeLyr,
     'InputLyr': InputLyr,
     'MaxPooling2DLyr': MaxPooling2DLyr,
     'DropoutLyr': DropoutLyr
-    }
+}
 
 
 class ModelGraph(object):
@@ -41,17 +48,17 @@ class ModelGraph(object):
         for i in range(self.num_layers):
             curr_layer_spec = self.spec_dict['layer_{}'.format(i)]
             layer_cls = CLASS_NAME[curr_layer_spec['layer']]
-            #print(curr_layer_spec)
-            #calls SPLayer classes on current layer spec
+            # print(curr_layer_spec)
+            # calls SPLayer classes on current layer spec
             new_layer = layer_cls(curr_layer_spec)
             self.layers.append(new_layer)
-            #appends instances of each SPlayer class
+            # appends instances of each SPlayer class
 
     def _compose_model(self):
         """
         Strings the layers together into an actual keras model
         """
-        #Input class
+        # Input class
         self.model = self.input_layer.layer
         # Stacks the layers together
         for layer in self.layers:
@@ -65,13 +72,12 @@ class ModelGraph(object):
         Strings the layers together into an actual keras model
         alternate approach
         """
-        #start off model, possibly alter the type of model in the future
+        # start off model, possibly alter the type of model in the future
         self.model = Sequential()
         self.model.add(self.input_layer.input_layer)
 
         for layer in self.layers:
             self.model.add(layer.layer)
-
 
     def _compile_model(self, dataset):
         """
@@ -81,13 +87,15 @@ class ModelGraph(object):
         if not isinstance(dataset, Dataset):
             raise ValueError("Dataset should be one of the Dataset classes")
         if self.input_layer.layer_shape != dataset.input_shape and self.model.output_shape != dataset.output_shape:
-            raise ValueError("Input or output shapes do not align with input or output shape of dataset")
+            raise ValueError(
+                "Input or output shapes do not align with input or output shape of dataset")
 
         self.loss = dataset.loss
         self.opt = self.spec_dict['optimizer']
         self.metrics = dataset.metrics
 
-        self.model.compile(optimizer=self.opt, loss=self.loss, metrics=self.metrics)
+        self.model.compile(optimizer=self.opt,
+                           loss=self.loss, metrics=self.metrics)
 
     def train_on(self, dataset):
         """
@@ -95,14 +103,22 @@ class ModelGraph(object):
         dataset is a Dataset object
         """
         self._compile_model(dataset)
+<<<<<<< HEAD
         hist = self.model.fit(dataset.train_data, dataset.train_labels, batch_size=dataset.batch_size, epochs=dataset.epochs)
         # TODO(Allen): Have this function return a train_acc and test_acc as specified in main.py
         self.train_acc = hist.history['accuracy']
         self.test_acc = model.evaluate(dataset.test_data, dataset.test_labels, verbose=0)[1]
+=======
+        self.model.fit(dataset.train_data, dataset.train_labels,
+                       batch_size=dataset.batch_size, epochs=dataset.epochs)
+        # TODO(Allen): Have this function return a train_acc and test_acc as
+        # specified in main.py
+        self.train_acc = None
+        self.test_acc = None
+>>>>>>> dd467c7d25f35de08716eac400a1dab6e1290dbb
         return self.train_acc, self.test_acc
 
     def save(self):
         # TODO(ramimostafa): Save Keras model to folder with special name and overwrite folder if it exists
         # TODO(ramimostafa): Also setup self.savedir
         return None
-

@@ -44,13 +44,12 @@ def main(fname):
 
 if __name__ == '__main__':
     print("Retrieving json...")
-    #json_spec = "model_spec_alt.json"
+    # json_spec = "model_spec_alt.json"
     json_spec = "mnist_cnn.json"
 #    model_spec = get_json(sys.argv[1])
     model_spec = get_json(json_spec)
-    #print(model_spec)
+    # print(model_spec)
     print("Creating the model...")
     model = make_model(model_spec)
     print(model.model.summary())
     print(model.model)
-
