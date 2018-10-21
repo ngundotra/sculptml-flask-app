@@ -12,8 +12,9 @@ from SPLayers import (
     MaxPooling2DLyr,
     DropoutLyr)
 # from tensorflow.keras
-from tensorflow.keras import Sequential, Model
+from keras import Sequential, Model
 from datasets import Dataset
+import keras
 
 CLASS_NAME = {
     'DenseLyr': DenseLyr,
@@ -22,7 +23,8 @@ CLASS_NAME = {
     'ReshapeLyr': ReshapeLyr,
     'InputLyr': InputLyr,
     'MaxPooling2DLyr': MaxPooling2DLyr,
-    'DropoutLyr': DropoutLyr
+    'DropoutLyr': DropoutLyr,
+    'Adadelta': keras.optimizers.Adadelta
 }
 
 
@@ -42,7 +44,7 @@ class ModelGraph(object):
         Asks each layer class to instantiate each layer
         """
         self.layers = []
-        prev_out = None
+        # prev_out = None
         self.input_layer = InputLyr(self.spec_dict['input_layer'])
 
         for i in range(self.num_layers):
@@ -86,15 +88,15 @@ class ModelGraph(object):
         """
         if not isinstance(dataset, Dataset):
             raise ValueError("Dataset should be one of the Dataset classes")
-        if self.input_layer.layer_shape != dataset.input_shape and self.model.output_shape != dataset.output_shape:
-            raise ValueError(
-                "Input or output shapes do not align with input or output shape of dataset")
+        # if self.input_layer.layer_shape != dataset.input_shape and self.model.output_shape != dataset.output_shape:
+        #     raise ValueError(
+        #         "Input or output shapes do not align with input or output shape of dataset")
 
         self.loss = dataset.loss
-        self.opt = self.spec_dict['optimizer']
+        self.opt = CLASS_NAME.get(self.spec_dict['optimizer'])
         self.metrics = dataset.metrics
 
-        self.model.compile(optimizer=self.opt,
+        self.model.compile(optimizer=self.opt(),
                            loss=self.loss, metrics=self.metrics)
 
     def train_on(self, dataset):
@@ -103,19 +105,11 @@ class ModelGraph(object):
         dataset is a Dataset object
         """
         self._compile_model(dataset)
-<<<<<<< HEAD
+        print("batch size " + str(dataset.batch_size) + ", epochs: "+str(dataset.epochs))
         hist = self.model.fit(dataset.train_data, dataset.train_labels, batch_size=dataset.batch_size, epochs=dataset.epochs)
         # TODO(Allen): Have this function return a train_acc and test_acc as specified in main.py
         self.train_acc = hist.history['accuracy']
         self.test_acc = model.evaluate(dataset.test_data, dataset.test_labels, verbose=0)[1]
-=======
-        self.model.fit(dataset.train_data, dataset.train_labels,
-                       batch_size=dataset.batch_size, epochs=dataset.epochs)
-        # TODO(Allen): Have this function return a train_acc and test_acc as
-        # specified in main.py
-        self.train_acc = None
-        self.test_acc = None
->>>>>>> dd467c7d25f35de08716eac400a1dab6e1290dbb
         return self.train_acc, self.test_acc
 
     def save(self):

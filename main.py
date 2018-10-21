@@ -25,31 +25,28 @@ def train_model(mg, spec_dict):
     Returns directory location.
     Hands off compilation to shell script.
     """
-    dataset = spec_dict['dataset']
-    # Return Dataset obj or something
-    dataset = get_dataset(dataset)
+    # Return Dataset obj
+    dataset = get_dataset(spec_dict["dataset"])
     final_acc, test_acc = mg.train_on(dataset)
     mg.save()
     return mg.savedir
 
 
-def main(fname):
+def main():
+    print("Retrieving json...")
+    model_spec = get_json("mnist_cnn.json")
+    # get the model part of json
+    print("Creating the model...")
+    model = make_model(model_spec.get("model"))
+    print(model.model.summary())
+    # get the dataset part of json
+    # dataset = get_dataset(model_spec.get("dataset"))
+    saveddir = train_model(model, model_spec)
 
-    spec = get_json(fname)
-    model = make_model(spec)
-    saveddir = train_model(model, spec)
+
     print("Train accuracy is:", model.train_acc)
     print("Test accuracy is:", model.test_acc)
 
 
 if __name__ == '__main__':
-    print("Retrieving json...")
-    # json_spec = "model_spec_alt.json"
-    json_spec = "mnist_cnn.json"
-#    model_spec = get_json(sys.argv[1])
-    model_spec = get_json(json_spec)
-    # print(model_spec)
-    print("Creating the model...")
-    model = make_model(model_spec)
-    print(model.model.summary())
-    print(model.model)
+    main()

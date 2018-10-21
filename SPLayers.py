@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 import tensorflow as tf
-from tensorflow import keras
-from tensorflow.keras.layers import (
+#from tensorflow import keras
+import keras
+from keras.layers import (
     Input,
     InputLayer,
     Dense,
@@ -62,7 +63,7 @@ class InputLyr(SPModelLayer):
         self.layer_shape = layer_shape
         self.layer = Input(layer_shape)
         # extra input layer for compose_model2
-        self.input_layer = InputLayer(layer_shape)
+        self.input_layer = InputLayer(input_tensor=self.layer)
 
 
 class DenseLyr(SPModelLayer):
@@ -92,14 +93,13 @@ class Conv2DLyr(SPModelLayer):
     def __init__(self, model_spec):
         self.model_spec = model_spec
         # specifies default argument if argument is not in json spec
-        get_arg = lambda arg, value: model_spec[a] if model_spec.get(a) else v
-        
+        get_arg = lambda arg, value: model_spec[arg] if model_spec.get(arg) else value
         self.filters = model_spec['filters']
         self.kernel_size = parse_tuple(model_spec['kernel_size'])
         self.strides = parse_tuple(get_arg('strides', '(1,1)'))
         self.padding = get_arg('padding', 'valid')
         self.data_format = get_arg('data_format', None)
-        self.dilation_rate = parse_tuple(get_args('dilation_rate', '(1,1)'))
+        self.dilation_rate = parse_tuple(get_arg('dilation_rate', '(1,1)'))
         self.activation = get_arg('activation', None)
         self.use_bias = get_arg('use_bias', True)
         self.kernel_initializer = get_arg('kernal_initializer', 'glorot_uniform')
@@ -132,7 +132,7 @@ class MaxPooling2DLyr(SPModelLayer):
     def __init__(self, model_spec):
         self.model_spec = model_spec
         # specifies default argument if argument is not in json spec
-        get_arg = lambda arg, value: model_spec[a] if model_spec.get(a) else v
+        get_arg = lambda arg, value: model_spec[arg] if model_spec.get(arg) else value
 
         self.pool_size = parse_tuple(get_arg('pool_size', '(2,2'))
         self.strides = get_arg('strides', None)
@@ -150,8 +150,7 @@ class DropoutLyr(SPModelLayer):
     def __init__(self, model_spec):
         self.model_spec = model_spec
         # specifies default argument if argument is not in json spec
-        get_arg = lambda arg, value: model_spec[a] if model_spec.get(a) else v
-        
+        get_arg = lambda arg, value: model_spec[arg] if model_spec.get(arg) else value
         self.rate = model_spec['rate']
         self.noise_shape = get_arg('noise_shape', None)
         self.seed = get_arg('seed', None)
@@ -166,7 +165,7 @@ class BatchNormalizationLyr(SPModelLayer):
     def __init__(self, model_spec):
         self.model_spec = model_spec
         # specifies default argument if argument is not in json spec
-        get_arg = lambda arg, value: model_spec[a] if model_spec.get(a) else v
+        get_arg = lambda arg, value: model_spec[arg] if model_spec.get(arg) else value
 
         self.axis = get_arg('axis', -1)
         self.momentum = get_arg('momentum', 0.99)
