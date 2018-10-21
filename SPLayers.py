@@ -63,7 +63,7 @@ class InputLyr(SPModelLayer):
         self.layer_shape = layer_shape
         self.layer = Input(layer_shape)
         # extra input layer for compose_model2
-        self.input_layer = InputLayer(input_tensor=self.layer)
+        self.input_layer = InputLayer(input_shape=layer_shape)
 
 
 class DenseLyr(SPModelLayer):
@@ -109,6 +109,7 @@ class Conv2DLyr(SPModelLayer):
         self.activity_regularizer = get_arg('activity_regularizer', None)
         self.kernel_constraint = get_arg('kernel_contraint', None)
         self.bias_constraint = get_arg('bias_contraint', None)
+        # self.input_shape = parse_tuple(get_arg('input_shape', None))
         self.layer = Conv2D(
             filters=self.filters,
             kernel_size=self.kernel_size,

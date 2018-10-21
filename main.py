@@ -29,7 +29,7 @@ def train_model(mg, spec_dict):
     dataset = get_dataset(spec_dict["dataset"])
     final_acc, test_acc = mg.train_on(dataset)
     mg.save()
-    return mg.savedir
+    return final_acc, test_acc
 
 
 def main():
@@ -41,12 +41,9 @@ def main():
     print(model.model.summary())
     # get the dataset part of json
     # dataset = get_dataset(model_spec.get("dataset"))
-    saveddir = train_model(model, model_spec)
-
-
-    print("Train accuracy is:", model.train_acc)
-    print("Test accuracy is:", model.test_acc)
-
+    train_acc, test_acc = train_model(model, model_spec)
+    print("Train accuracy is:", train_acc)
+    print("Test accuracy is:", test_acc)
 
 if __name__ == '__main__':
     main()

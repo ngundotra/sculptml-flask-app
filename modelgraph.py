@@ -77,7 +77,6 @@ class ModelGraph(object):
         # start off model, possibly alter the type of model in the future
         self.model = Sequential()
         self.model.add(self.input_layer.input_layer)
-
         for layer in self.layers:
             self.model.add(layer.layer)
 
@@ -105,11 +104,11 @@ class ModelGraph(object):
         dataset is a Dataset object
         """
         self._compile_model(dataset)
-        print("batch size " + str(dataset.batch_size) + ", epochs: "+str(dataset.epochs))
+        print("batch size: " + str(dataset.batch_size) + ", epochs: "+str(dataset.epochs))
         hist = self.model.fit(dataset.train_data, dataset.train_labels, batch_size=dataset.batch_size, epochs=dataset.epochs)
         # TODO(Allen): Have this function return a train_acc and test_acc as specified in main.py
-        self.train_acc = hist.history['accuracy']
-        self.test_acc = model.evaluate(dataset.test_data, dataset.test_labels, verbose=0)[1]
+        self.train_acc = self.model.evaluate(dataset.train_data, dataset.train_labels, verbose=0)[1]
+        self.test_acc = self.model.evaluate(dataset.test_data, dataset.test_labels, verbose=0)[1]
         return self.train_acc, self.test_acc
 
     def save(self):
