@@ -6,6 +6,7 @@ import sys
 import pdb
 from modelgraph import ModelGraph
 from datasets import get_dataset
+import coremltools
 
 
 def get_json(fname):
@@ -34,7 +35,25 @@ def train_model(mg, spec_dict):
     return final_acc, test_acc
 
 
+def compile_model(mg):
+    """
+    Converts our modelgraph object to coreml model
+    :param mg: ModelGraph
+    :param spec_dict: Dictionary representing the outermost JSON
+    :return: location of saved coremlmodel
+    """
+    keras_model = mg.model
+    dataset = mg.dataset
+    desc = dataset.coreml_specs
+    coreml_model = coremltools.converters.keras.convert(keras_model, **desc)
+    coremltools.utils.save_spec(coreml_model, "current.mlmodel")
+    return coreml_model
+
+
 def main():
+    """
+    Receives a JSON, builds the corresponding Keras model, trains it, and compiles it
+    """
     print("Retrieving json...")
     model_spec = get_json(sys.argv[1])
     print("Creating the model...")

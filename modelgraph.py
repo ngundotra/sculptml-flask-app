@@ -33,6 +33,9 @@ class ModelGraph(object):
     """Read file docs"""
 
     def __init__(self, spec_dict):
+        self.train_acc = None
+        self.test_acc = None
+        self.dataset = None
         self.spec_dict = spec_dict
         self.name = spec_dict['model_name']
         self.num_layers = spec_dict['num_layers']
@@ -109,6 +112,7 @@ class ModelGraph(object):
         self.train_acc = hist.history['acc']
         self.test_acc = self.model.evaluate(dataset.test_data, dataset.test_labels, verbose=0)[1]
         return self.train_acc, self.test_acc
+
 
     def save(self):
         # TODO(ramimostafa): Save Keras model to folder with special name and overwrite folder if it exists

@@ -15,9 +15,12 @@ def get_dataset(data_json):
 
 
 class Dataset(ABC):
+    """Provides the template for all other datasets."""
 
     def __init__(self, data_json):
         self.name = data_json["name"]
+        # Very important this should be hard coded as dictionary for each dataset
+        self.coreml_specs = None
         self.batch_size = data_json.get("batch_size")  # Scalar
         self.input_shape = None  # Tuple
         self.output_shape = None # Tuple
