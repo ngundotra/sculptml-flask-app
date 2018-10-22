@@ -31,7 +31,7 @@ class IrisDataset(Dataset):
         # Parse your options from data_json
         # Do any loading that needs to be done here
         iris = datasets.load_iris()
-        self.input_shape = list(iris.data.shape)
+        self.input_shape = [iris.data.shape[1]]
         self.output_shape = list(iris.target.shape)
 
         # Split the data into training and testing data

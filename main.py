@@ -3,6 +3,7 @@ Receives the filename of a JSON specification for building and training an ML mo
 """
 import json
 import sys
+import pdb
 from modelgraph import ModelGraph
 from datasets import get_dataset
 
@@ -44,14 +45,8 @@ def main(fname):
 
 if __name__ == '__main__':
     print("Retrieving json...")
-    #json_spec = "model_spec_alt.json"
-    #json_spec = "mnist_cnn.json"
-    json_spec = "iris_spec.json"
-#    model_spec = get_json(sys.argv[1])
-    model_spec = get_json(json_spec)
-    #print(model_spec)
+    model_spec = get_json(sys.argv[1])
     print("Creating the model...")
     model = make_model(model_spec)
     print(model.model.summary())
     print(model.model)
-

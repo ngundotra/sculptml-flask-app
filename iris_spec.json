@@ -7,9 +7,9 @@
   "model_name": "Test-v0",
   "num_layers": 1,
   "optimizer": "rmsprop",
-  "metrics": ["accuracy"],
+  "metrics": ["acc"],
   "input_layer": {
-    "dim": "(150, 4)"
+    "dim": "(4)"
   },
   "layer_0": {
     "layer": "DenseLyr",
