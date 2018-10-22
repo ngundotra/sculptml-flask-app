@@ -34,19 +34,17 @@ def train_model(mg, spec_dict):
     return mg.savedir
 
 
-def main(fname):
-
-    spec = get_json(fname)
-    model = make_model(spec)
-    saveddir = train_model(model, spec)
-    print("Train accuracy is:", model.train_acc)
-    print("Test accuracy is:", model.test_acc)
-
-
-if __name__ == '__main__':
+def main_iris():
     print("Retrieving json...")
     model_spec = get_json(sys.argv[1])
     print("Creating the model...")
     model = make_model(model_spec)
     print(model.model.summary())
     print(model.model)
+    saveddir = train_model(model, spec)
+    print("Train accuracy is:", model.train_acc)
+    print("Test accuracy is:", model.test_acc)
+
+
+if __name__ == '__main__':
+    main_iris()
