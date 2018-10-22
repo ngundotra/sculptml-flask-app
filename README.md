@@ -2,6 +2,14 @@
 
 This is the library of tools needed to receive requests for building, training and compiling machine learning models to CoreML models for visualization and education purposes.
 
+# HERES HOW TO RUN THE CODE
+
+```python
+python main.py mnist_cnn.json # or 
+python main.py iris_spec.json
+```
+
+
 
 The framework that will ultimately handle all requests can vary, maybe Python Flask, Node.js, even Scala Akka. This should be relatively simple: just building out endpoints
 for a simple RESTful API. Internally, calls will probably be routed to an AWS server to build + train + compile the ML models. The last step will be delivering the ML model
