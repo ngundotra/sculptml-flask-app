@@ -11,7 +11,7 @@ def get_dataset(data_json):
     if dataset:
         return dataset(data_json)
     else:
-        print("dataset not supported")
+        print("Dataset {} not supported".format(data_json['name']))
 
 
 class Dataset(ABC):
@@ -19,8 +19,16 @@ class Dataset(ABC):
 
     def __init__(self, data_json):
         self.name = data_json["name"]
+
         # Very important this should be hard coded as dictionary for each dataset
-        self.coreml_specs = None
+        # Link for reference: https://apple.github.io/coremltools/generated/coremltools.converters.keras.convert.html
+        self.coreml_specs = {
+            'input_names': "",
+            'output_names': "",
+            # Optional
+            # 'class_labels': [""],
+        }
+
         self.batch_size = data_json.get("batch_size")  # Scalar
         self.input_shape = None  # Tuple
         self.output_shape = None # Tuple
@@ -36,6 +44,7 @@ class Dataset(ABC):
 class IrisDataset(Dataset):
 
     def __init__(self, data_json):
+        # TODO(ngundotra): rewrite this code, and some test models
         Dataset.__init__(self, data_json)
         # Parse your options from data_json
         # Do any loading that needs to be done here
@@ -49,6 +58,12 @@ class IrisDataset(Dataset):
         self.train_labels = iris.target[:int(len(iris.target) * self.data_split)]
         self.test_data = iris.data[int(len(iris.data) * self.data_split) : len(iris.data)]
         self.test_labels = iris.target[int(len(iris.target) * self.data_split) : len(iris.target)]
+
+        # Set coreml_specs
+        self.coreml_specs = {
+            "input_names": "iris_features",
+            "output_names": iris.target_names.tolist()
+        }
 
 
 class CirclesDataset(Dataset):
