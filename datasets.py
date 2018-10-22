@@ -13,6 +13,7 @@ def get_dataset(data_json):
     else:
         print("dataset not supported")
 
+
 class Dataset(ABC):
 
     def __init__(self, data_json):
@@ -21,12 +22,13 @@ class Dataset(ABC):
         self.input_shape = None  # Tuple
         self.output_shape = None # Tuple
         self.loss = data_json["loss"]  # String that describes the Keras loss function e.g. "mse"
-        self.metrics = ["accuracy"]  # List of Keras strings for metrics
+        self.metrics = data_json["metric"]  # List of Keras strings for metrics
         self.train_data = None  # Should be a numpy array
         self.train_labels = None  # Should be a numpy array
         self.test_data = None # Should be a numpy array
         self.test_labels = None # Should be a numpy array
         self.data_split = 0.8 # Train/Test split
+
 
 class IrisDataset(Dataset):
 
@@ -44,12 +46,14 @@ class IrisDataset(Dataset):
         self.test_data = iris.data[int(len(iris.data) * self.data_split) : len(iris.data)]
         self.test_labels = iris.target[int(len(iris.target) * self.data_split) : len(iris.target)]
 
+
 class CirclesDataset(Dataset):
 
     def __init__(self, data_json):
         Dataset.__init__(self, data_json)
         # Parse your options from data_json
         # Do any loading that needs to be done here
+
 
 class MNISTDataset(Dataset):
     def __init__(self, data_json):
@@ -91,7 +95,7 @@ class MNISTDataset(Dataset):
 
 # dictionary of dataset classes supported
 CLASS_NAME = {
-    'Iris' : IrisDataset,
-    'Circles' : CirclesDataset,
-    'MNIST' : MNISTDataset
+    'Iris': IrisDataset,
+    'Circles': CirclesDataset,
+    'MNIST': MNISTDataset
 }

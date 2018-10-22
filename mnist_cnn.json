@@ -53,6 +53,7 @@
         "img_rows" : 28,
         "img_cols" : 28,
         "num_classes" : 10,
-        "epochs" : 1
+        "epochs" : 1,
+        "metric" : ["accuracy"]
     }
 }
