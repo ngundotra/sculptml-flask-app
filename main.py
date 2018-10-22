@@ -3,6 +3,7 @@ Receives the filename of a JSON specification for building and training an ML mo
 """
 import json
 import sys
+import pdb
 from modelgraph import ModelGraph
 from datasets import get_dataset
 
@@ -34,11 +35,16 @@ def train_model(mg, spec_dict):
 
 def main_mnist():
     print("Retrieving json...")
+<<<<<<< HEAD
     model_spec = get_json("mnist_cnn.json")
     # get the model part of json
+=======
+    model_spec = get_json(sys.argv[1])
+>>>>>>> e6414df7f5a0cf41541f43c29f0546b6c7422e77
     print("Creating the model...")
     model = make_model(model_spec.get("model"))
     print(model.model.summary())
+<<<<<<< HEAD
     # get the dataset part of json
     # dataset = get_dataset(model_spec.get("dataset"))
     train_acc, test_acc = train_model(model, model_spec)
@@ -47,3 +53,6 @@ def main_mnist():
 
 if __name__ == '__main__':
     main_mnist()
+=======
+    print(model.model)
+>>>>>>> e6414df7f5a0cf41541f43c29f0546b6c7422e77

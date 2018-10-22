@@ -3,6 +3,7 @@ Parses a JSON spec file for model creation.
 Supports training on our custom "Datasets"
 Check `main.py` for usage cases.
 """
+<<<<<<< HEAD
 from SPLayers import (
     DenseLyr,
     FlattenLyr,
@@ -13,6 +14,12 @@ from SPLayers import (
     DropoutLyr)
 # from tensorflow.keras
 from keras import Sequential, Model
+=======
+from SPLayers import DenseLyr, FlattenLyr, ReshapeLyr, InputLyr, Conv2DLyr, MaxPooling2DLyr, DropoutLyr
+#from tensorflow.keras 
+import pdb
+from tensorflow.keras import Sequential, Model
+>>>>>>> e6414df7f5a0cf41541f43c29f0546b6c7422e77
 from datasets import Dataset
 import keras
 
@@ -87,9 +94,14 @@ class ModelGraph(object):
         """
         if not isinstance(dataset, Dataset):
             raise ValueError("Dataset should be one of the Dataset classes")
+<<<<<<< HEAD
         # if self.input_layer.layer_shape != dataset.input_shape and self.model.output_shape != dataset.output_shape:
         #     raise ValueError(
         #         "Input or output shapes do not align with input or output shape of dataset")
+=======
+        if self.input_layer.layer_shape != dataset.input_shape and self.model.output_shape != dataset.output_shape:
+            raise ValueError("Input or output shapes do not align with input or output shape of dataset", self.input_layer.layer_shape, dataset.input_shape)
+>>>>>>> e6414df7f5a0cf41541f43c29f0546b6c7422e77
 
         self.loss = dataset.loss
         self.opt = CLASS_NAME.get(self.spec_dict['optimizer'])
@@ -104,10 +116,16 @@ class ModelGraph(object):
         dataset is a Dataset object
         """
         self._compile_model(dataset)
+<<<<<<< HEAD
         print("batch size: " + str(dataset.batch_size) + ", epochs: "+str(dataset.epochs))
         hist = self.model.fit(dataset.train_data, dataset.train_labels, batch_size=dataset.batch_size, epochs=dataset.epochs)
         # TODO(Allen): Have this function return a train_acc and test_acc as specified in main.py
         self.train_acc = self.model.evaluate(dataset.train_data, dataset.train_labels, verbose=0)[1]
+=======
+        hist = self.model.fit(dataset.train_data, dataset.train_labels, batch_size=dataset.batch_size)
+        # TODO(Allen): Have this function return a train_acc and test_acc as specified in main.py
+        self.train_acc = hist.history['acc']
+>>>>>>> e6414df7f5a0cf41541f43c29f0546b6c7422e77
         self.test_acc = self.model.evaluate(dataset.test_data, dataset.test_labels, verbose=0)[1]
         return self.train_acc, self.test_acc
 
