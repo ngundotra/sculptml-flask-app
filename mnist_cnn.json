@@ -1,48 +1,60 @@
 {
-    "__info__": "Mnist CNN model from keras-team examples",
-    "model_name": "simple CNN",
-    "num_layers": 7,
-    "loss" : "mse",
-    "optimizer": "Adadelta",
-    "input_layer": {
-        "dim": "(28, 28, 1)"
+    "model": {
+        "__info__": "Mnist CNN model from keras-team examples",
+        "model_name": "simple CNN",
+        "num_layers": 8,
+        "loss" : "mse",
+        "optimizer": "Adadelta",
+        "input_layer": {
+            "dim": "(28, 28, 1)"
+        },
+        "layer_0": {
+            "layer": "Conv2DLyr",
+            "filters": 32,
+            "kernel_size": "(3,3)",
+            "activation": "relu",
+            "input_shape": "(28,28,1)"
+        },
+        "layer_1": {
+            "layer": "Conv2DLyr",
+            "filters": 64,
+            "kernel_size": "(3,3)",
+            "activation": "relu"
+        },
+        "layer_2": {
+            "layer": "MaxPooling2DLyr",
+            "pool_size" : "(2,2)"
+        },
+        "layer_3": {
+            "layer": "DropoutLyr",
+            "rate": 0.25
+        },
+        "layer_4": {
+            "layer":"FlattenLyr"
+        },
+        "layer_5": {
+            "layer": "DenseLyr",
+            "units": 128,
+            "activation": "relu"
+        },
+        "layer_6": {
+            "layer": "DropoutLyr",
+            "rate": 0.5
+        },
+        "layer_7": {
+            "layer": "DenseLyr",
+            "units": 10,
+            "activation":"softmax"
+        }
     },
-    "layer_0": {
-        "layer": "Conv2DLyr",
-        "filters": 32,
-        "kernel_size": "(3,3)",
-        "activation": "relu",
-        "input_shape": "(28,28,1)"
-    },
-    "layer_1": {
-        "layer": "Conv2DLyr",
-        "filters": 64,
-        "kernel_size": "(3,3)",
-        "activation": "relu"
-    },
-    "layer_2": {
-        "layer": "MaxPooling2DLyr",
-        "pool_size" : "(2,2)"
-    },
-    "layer_3": {
-        "layer": "DropoutLyr",
-        "rate": 0.25
-    },
-    "layer_4": {
-        "layer":"FlattenLyr"
-    },
-    "layer_5": {
-        "layer": "DenseLyr",
-        "units": 128,
-        "activation": "relu"
-    },
-    "layer_6": {
-        "layer": "DropoutLyr",
-        "rate": 0.5
-    },
-    "layer_7": {
-        "layer": "DenseLyr",
-        "units": "num_classes",
-        "activation":"softmax"
+    "dataset" : {
+        "name" : "MNIST",
+        "batch_size" : 128,
+        "img_rows" : 28,
+        "img_cols" : 28,
+        "num_classes" : 10,
+        "epochs" : 1,
+        "metrics" : ["accuracy"],
+        "loss" : "mse"
     }
 }
