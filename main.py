@@ -49,12 +49,12 @@ def compile_model(mg):
     return coreml_model
 
 
-def main():
+def main(json_query):
     """
     Receives a JSON, builds the corresponding Keras model, trains it, and compiles it
     """
     print("Retrieving json...")
-    model_spec = get_json(sys.argv[1])
+    model_spec = get_json(json_query)
     print("Creating the model...")
     model = make_model(model_spec.get("model"))
     print(model.model.summary())
@@ -69,4 +69,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    """Runs main on the flask file passed in as first arg"""
+    main(sys.argv[1])

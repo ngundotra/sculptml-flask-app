@@ -15,7 +15,8 @@ from SPLayers import (
     InputLyr,
     Conv2DLyr,
     MaxPooling2DLyr,
-    DropoutLyr)
+    DropoutLyr
+)
 
 
 CLASS_NAME = {
