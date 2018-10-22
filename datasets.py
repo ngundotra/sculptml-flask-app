@@ -58,11 +58,16 @@ class IrisDataset(Dataset):
         self.train_labels = iris.target[:int(len(iris.target) * self.data_split)]
         self.test_data = iris.data[int(len(iris.data) * self.data_split) : len(iris.data)]
         self.test_labels = iris.target[int(len(iris.target) * self.data_split) : len(iris.target)]
+        # Convert to labels
+        self.train_labels = keras.utils.to_categorical(self.train_labels)
+        self.test_labels = keras.utils.to_categorical(self.test_labels)
 
         # Set coreml_specs
         self.coreml_specs = {
             "input_names": "iris_features",
-            "output_names": iris.target_names.tolist()
+            "output_names": "classification",
+            # For classifying!
+            "class_labels": iris.target_names.tolist()
         }
 
 

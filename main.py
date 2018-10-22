@@ -30,8 +30,7 @@ def train_model(mg, spec_dict):
     # Return Dataset obj
     dataset = get_dataset(spec_dict["dataset"])
     final_acc, test_acc = mg.train_on(dataset)
-    mg.save()
-    # TODO: will be returning savedir once that is implemented
+    savedir = mg.save()
     return final_acc, test_acc
 
 
@@ -47,7 +46,8 @@ def compile_model(mg):
     desc = dataset.coreml_specs
     coreml_model = coremltools.converters.keras.convert(keras_model, **desc)
     # Assumes mg.savedir is set
-    coreml_model.save(mg.savedir)
+    from os.path import join
+    coreml_model.save(join(mg.savedir, "coremlmodel"))
     return coreml_model
 
 

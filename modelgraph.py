@@ -6,6 +6,7 @@ Check `main.py` for usage cases.
 # from tensorflow.keras
 from keras import Sequential, Model
 from datasets import Dataset
+import os
 import keras
 from SPLayers import (
     DenseLyr,
@@ -116,6 +117,23 @@ class ModelGraph(object):
 
 
     def save(self):
-        # TODO(ramimostafa): Save Keras model to folder with special name and overwrite folder if it exists
-        # TODO(ramimostafa): Also setup self.savedir
-        return None
+        """
+        Saves Keras model in the saved-models folder using the keras save function
+        Name of the model is the name of the directory
+        e.g. model name is "vrab" ==>
+            saved-models/
+                vrab/
+                    model.h5
+                    coremlmodel.coremlmodel
+        """
+        base = 'saved-models'
+        from os.path import join, exists
+        if not exists(base):
+            os.mkdir(base)
+        self.savedir = join(base, self.name)
+        if not exists(self.savedir):
+            os.mkdir(self.savedir)
+
+        path = join(self.savedir, 'model.h5')
+        self.model.save(path)
+        return self.savedir
