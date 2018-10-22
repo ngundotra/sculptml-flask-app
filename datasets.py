@@ -17,7 +17,7 @@ class Dataset(ABC):
         self.input_shape = None  # Tuple
         self.output_shape = None # Tuple
         self.loss = data_json["loss"]  # String that describes the Keras loss function e.g. "mse"
-        self.metrics = ["accuracy"]  # List of Keras strings for metrics
+        self.metrics = data_json["metrics"]  # List of Keras strings for metrics
         self.train_data = None  # Should be a numpy array
         self.train_labels = None  # Should be a numpy array
         self.test_data = None # Should be a numpy array

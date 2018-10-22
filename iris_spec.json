@@ -2,12 +2,13 @@
   "__info__": "This is a JSON file used for testing the model creation process",
   "dataset": {
     "name": "iris",
-    "loss": "binary_crossentropy"
+    "loss": "binary_crossentropy",
+    "metrics": ["accuracy"]
   },
   "model_name": "Test-v0",
   "num_layers": 1,
   "optimizer": "rmsprop",
-  "metrics": ["acc"],
+  
   "input_layer": {
     "dim": "(4)"
   },
