@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
 import tensorflow as tf
-#from tensorflow import keras
-import keras
-from keras.layers import (
+import tensorflow.keras as keras
+from tensorflow.keras.layers import (
     Input,
     InputLayer,
     Dense,

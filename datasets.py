@@ -1,8 +1,8 @@
 from abc import ABC
 from sklearn import datasets
-from keras.datasets import mnist
-from keras import backend as K
-import keras
+from tensorflow.keras.datasets import mnist
+from tensorflow.keras import backend as K
+import tensorflow.keras as keras
 
 
 def get_dataset(data_json):
