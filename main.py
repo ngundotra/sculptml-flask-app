@@ -32,7 +32,7 @@ def train_model(mg, spec_dict):
     return final_acc, test_acc
 
 
-def main():
+def main_mnist():
     print("Retrieving json...")
     model_spec = get_json("mnist_cnn.json")
     # get the model part of json
@@ -46,4 +46,4 @@ def main():
     print("Test accuracy is:", test_acc)
 
 if __name__ == '__main__':
-    main()
+    main_mnist()
