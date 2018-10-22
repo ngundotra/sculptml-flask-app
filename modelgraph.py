@@ -92,10 +92,10 @@ class ModelGraph(object):
             raise ValueError("Input or output shapes do not align with input or output shape of dataset", self.input_layer.layer_shape, dataset.input_shape)
 
         self.loss = dataset.loss
-        self.opt = CLASS_NAME.get(self.spec_dict['optimizer'])
+        self.opt = self.spec_dict['optimizer']
         self.metrics = dataset.metrics
 
-        self.model.compile(optimizer=self.opt(),
+        self.model.compile(optimizer=self.opt,
                            loss=self.loss, metrics=self.metrics)
 
     def train_on(self, dataset):

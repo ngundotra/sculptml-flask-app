@@ -22,7 +22,7 @@ class Dataset(ABC):
         self.input_shape = None  # Tuple
         self.output_shape = None # Tuple
         self.loss = data_json["loss"]  # String that describes the Keras loss function e.g. "mse"
-        self.metrics = data_json["metric"]  # List of Keras strings for metrics
+        self.metrics = data_json["metrics"]  # List of Keras strings for metrics
         self.train_data = None  # Should be a numpy array
         self.train_labels = None  # Should be a numpy array
         self.test_data = None # Should be a numpy array
@@ -39,6 +39,7 @@ class IrisDataset(Dataset):
         iris = datasets.load_iris()
         self.input_shape = [iris.data.shape[1]]
         self.output_shape = list(iris.target.shape)
+        self.epochs = data_json.get("epochs")
 
         # Split the data into training and testing data
         self.train_data = iris.data[:int(len(iris.data) * self.data_split)]
@@ -64,6 +65,7 @@ class MNISTDataset(Dataset):
         self.num_classes = data_json.get("num_classes")
         self.epochs = data_json.get("epochs")
         self.loss = keras.losses.categorical_crossentropy
+        self.input_shape = [28, 28, 1]
         # the data, split between train and test sets
         (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
