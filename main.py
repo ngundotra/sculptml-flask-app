@@ -3,7 +3,6 @@ Receives the filename of a JSON specification for building and training an ML mo
 """
 import json
 import sys
-import pdb
 from modelgraph import ModelGraph
 from datasets import get_dataset
 import coremltools
@@ -27,7 +26,6 @@ def train_model(mg, spec_dict):
     Returns directory location.
     Hands off compilation to shell script.
     """
-    # Return Dataset obj
     dataset = get_dataset(spec_dict["dataset"])
     final_acc, test_acc = mg.train_on(dataset)
     savedir = mg.save()
@@ -67,7 +65,6 @@ def main():
     print("Train accuracy is:", train_acc)
     print("Test accuracy is:", test_acc)
 
-    pdb.set_trace()
     coreml_model = compile_model(model)
 
 
