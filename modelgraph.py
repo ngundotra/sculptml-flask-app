@@ -106,6 +106,7 @@ class ModelGraph(object):
         Compiles then trains model on the dataset using the options parsed from the JSON
         dataset is a Dataset object
         """
+        self.dataset = dataset # Figured would be useful to have this
         self._compile_model(dataset)
         print("batch size: " + str(dataset.batch_size) + ", epochs: "+str(dataset.epochs))
         hist = self.model.fit(dataset.train_data, dataset.train_labels, batch_size=dataset.batch_size, epochs=dataset.epochs)

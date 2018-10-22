@@ -16,7 +16,7 @@
     },
     "layer_0": {
       "layer": "DenseLyr",
-      "units": 1,
+      "units": 3,
       "activation": "softmax"
     }
   }

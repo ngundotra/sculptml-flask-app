@@ -49,8 +49,8 @@ class IrisDataset(Dataset):
         # Parse your options from data_json
         # Do any loading that needs to be done here
         iris = datasets.load_iris()
-        self.input_shape = [iris.data.shape[1]]
-        self.output_shape = list(iris.target.shape)
+        self.input_shape = [iris.data.shape[1]] # 4
+        self.output_shape = [len(iris.target_names)] # 3
         self.epochs = data_json.get("epochs")
 
         # Split the data into training and testing data
@@ -75,6 +75,8 @@ class CirclesDataset(Dataset):
 
 
 class MNISTDataset(Dataset):
+    """Note that the image preprocessing has to be done on iOS side,
+    as far as I know (ngundotra)"""
     def __init__(self, data_json):
         Dataset.__init__(self, data_json)
         # Parse options
@@ -84,6 +86,7 @@ class MNISTDataset(Dataset):
         self.epochs = data_json.get("epochs")
         self.loss = keras.losses.categorical_crossentropy
         self.input_shape = [28, 28, 1]
+        self.output_shape = [10]
         # the data, split between train and test sets
         (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
@@ -96,10 +99,11 @@ class MNISTDataset(Dataset):
             x_test = x_test.reshape(x_test.shape[0], self.img_rows, self.img_cols, 1)
             input_shape = (self.img_rows, self.img_cols, 1)
 
+        scale = 1/255.0
         x_train = x_train.astype('float32')
         x_test = x_test.astype('float32')
-        x_train /= 255
-        x_test /= 255
+        x_train *= scale
+        x_test *= scale
         print('x_train shape:', x_train.shape)
         print(x_train.shape[0], 'train samples')
         print(x_test.shape[0], 'test samples')
@@ -112,6 +116,17 @@ class MNISTDataset(Dataset):
         self.train_labels = y_train
         self.test_data = x_test
         self.test_labels = y_test
+
+        # Set CoreML specs
+        self.coreml_specs = {
+            'input_names': "image",
+            'output_names': "digit_probs",
+            # Special because pictures & class_labels
+            'class_labels': [str(i) for i in range(10)], # ['0', '1', ...]
+            'image_input_names': 'image',
+            'scale': 1/255.0,
+        }
+
 
 # dictionary of dataset classes supported
 CLASS_NAME = {

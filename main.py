@@ -46,7 +46,8 @@ def compile_model(mg):
     dataset = mg.dataset
     desc = dataset.coreml_specs
     coreml_model = coremltools.converters.keras.convert(keras_model, **desc)
-    coremltools.utils.save_spec(coreml_model, "current.mlmodel")
+    # Assumes mg.savedir is set
+    coreml_model.save(mg.savedir)
     return coreml_model
 
 
@@ -65,6 +66,10 @@ def main():
     train_acc, test_acc = train_model(model, model_spec)
     print("Train accuracy is:", train_acc)
     print("Test accuracy is:", test_acc)
+
+    pdb.set_trace()
+    coreml_model = compile_model(model)
+
 
 if __name__ == '__main__':
     main()
