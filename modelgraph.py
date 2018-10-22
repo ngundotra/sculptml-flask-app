@@ -81,7 +81,7 @@ class ModelGraph(object):
         if not isinstance(dataset, Dataset):
             raise ValueError("Dataset should be one of the Dataset classes")
         if self.input_layer.layer_shape != dataset.input_shape and self.model.output_shape != dataset.output_shape:
-            raise ValueError("Input or output shapes do not align with input or output shape of dataset")
+            raise ValueError("Input or output shapes do not align with input or output shape of dataset", self.input_layer.layer_shape, dataset.input_shape)
 
         self.loss = dataset.loss
         self.opt = self.spec_dict['optimizer']
@@ -95,7 +95,7 @@ class ModelGraph(object):
         dataset is a Dataset object
         """
         self._compile_model(dataset)
-        hist = self.model.fit(dataset.train_data, dataset.train_labels, batch_size=dataset.batch_size, epochs=dataset.epochs)
+        hist = self.model.fit(dataset.train_data, dataset.train_labels, batch_size=dataset.batch_size)
         # TODO(Allen): Have this function return a train_acc and test_acc as specified in main.py
         self.train_acc = hist.history['accuracy']
         self.test_acc = model.evaluate(dataset.test_data, dataset.test_labels, verbose=0)[1]

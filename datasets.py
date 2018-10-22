@@ -16,7 +16,7 @@ class Dataset(ABC):
         self.batch_size = None  # Scalar
         self.input_shape = None  # Tuple
         self.output_shape = None # Tuple
-        self.loss = None  # String that describes the Keras loss function e.g. "mse"
+        self.loss = data_json["loss"]  # String that describes the Keras loss function e.g. "mse"
         self.metrics = ["accuracy"]  # List of Keras strings for metrics
         self.train_data = None  # Should be a numpy array
         self.train_labels = None  # Should be a numpy array
@@ -31,8 +31,8 @@ class IrisDataset(Dataset):
         # Parse your options from data_json
         # Do any loading that needs to be done here
         iris = datasets.load_iris()
-        self.input_shape = iris.data.shape
-        self.output_shape = iris.target.shape
+        self.input_shape = list(iris.data.shape)
+        self.output_shape = list(iris.target.shape)
 
         # Split the data into training and testing data
         self.train_data = iris.data[:int(len(iris.data) * self.data_split)]

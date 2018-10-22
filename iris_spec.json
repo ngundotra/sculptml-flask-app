@@ -1,15 +1,15 @@
 {
   "__info__": "This is a JSON file used for testing the model creation process",
   "dataset": {
-    "name": "iris"
+    "name": "iris",
+    "loss": "binary_crossentropy"
   },
   "model_name": "Test-v0",
   "num_layers": 1,
-  "loss": "mse",
   "optimizer": "rmsprop",
   "metrics": ["accuracy"],
   "input_layer": {
-    "dim": "(4)"
+    "dim": "(150, 4)"
   },
   "layer_0": {
     "layer": "DenseLyr",
