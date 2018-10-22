@@ -75,8 +75,6 @@ class CirclesDataset(Dataset):
 
 
 class MNISTDataset(Dataset):
-    """Note that the image preprocessing has to be done on iOS side,
-    as far as I know (ngundotra)"""
     def __init__(self, data_json):
         Dataset.__init__(self, data_json)
         # Parse options
@@ -124,7 +122,7 @@ class MNISTDataset(Dataset):
             # Special because pictures & class_labels
             'class_labels': [str(i) for i in range(10)], # ['0', '1', ...]
             'image_input_names': 'image',
-            'scale': 1/255.0,
+            'image_scale': 1/255.0,
         }
 
 
