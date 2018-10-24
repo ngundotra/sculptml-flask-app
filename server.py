@@ -9,7 +9,17 @@ from subprocess import Popen
 # $ flask run
 # If you're on windows lol here's a link: http://flask.pocoo.org/docs/1.0/quickstart/
 app = Flask(__name__)
+"""If dummy==True, then flask server *should* return coreml model,
+
+resp = poing.post_up('http://127.0.0.1:5000', 'mnist_cnn.json')
+resp
+^ will get dummy model"""
 dummy = False # sets up some fake shit, lmao
+local = True
+if local:
+    pypath = '/Users/ngundotra/anaconda3/envs/keras/bin/python'
+else:
+    pypath = '/sculptml-venv/bin/python'
 
 
 @app.route('/')
@@ -35,7 +45,7 @@ if dummy:
         return response
 
 
-    @app.route('/make-model', methods=['POST'])
+    @app.route('/make-model', methods=['POST', 'GET'])
     def send_model():
         """
         This is a dummy function that returns a pre compiled
@@ -57,11 +67,11 @@ else:
         This starts the training process.
         """
         json_dict = request.get_json()
-        print("Received JSON", sys.stderr)
+        print("Received JSON", file=sys.stderr)
         json_fname = 'user_request.json'
-        with open(json_fname, 'wb') as f:
-            f.write(json_dict)
-        proc = Popen(['python', 'main.py', json_fname], shell=True)
+        with open(json_fname, 'w') as f:
+            f.write(json.dumps(json_dict))
+        proc = Popen([pypath, 'main.py', json_fname])
         return Response("Request received", 200)
 
     @app.route("/get-model", methods=['POST', 'GET'])

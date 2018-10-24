@@ -52,6 +52,10 @@ def compile_model(mg):
 def main(json_query):
     """
     Receives a JSON, builds the corresponding Keras model, trains it, and compiles it
+    The last step, `compile_model` saves the compiled model to
+    saved-models/
+        `model_name`/
+            *.coremlmodel
     """
     print("Retrieving json...")
     model_spec = get_json(json_query)
