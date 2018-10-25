@@ -4,10 +4,10 @@ Supports training on our custom "Datasets"
 Check `main.py` for usage cases.
 """
 # from tensorflow.keras
-from tensorflow.keras import Sequential, Model
+import keras
+from keras import Sequential, Model
 from datasets import Dataset
 import os
-import tensorflow.keras as keras
 from SPLayers import (
     DenseLyr,
     FlattenLyr,

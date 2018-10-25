@@ -12,9 +12,17 @@ def post_up(server, fname):
     return resp
     
 def get_model(server, model_name):
-    """Asks for `model_name` at the /get-model endpoint"""
-    resp = requests.get(server, params={'model_name': model_name})
+    """Asks for `model_name` at the /get-model endpoint
+    
+    e.g. get_model('http://127.0.0.1:5000', model_name_from_json('iris_spec.json'))
+    """
+    url = server + '/get-model'
+    resp = requests.get(url, params={'model_name': model_name})
     return resp
+
+def get_model_local(fname):
+    """Gets model using model_name from a specific json file"""
+    return get_model('http://127.0.0.1:5000', model_name_from_json('iris_spec.json'))
 
 def model_name_from_json(fname):
     """Just a nice util. Fname is name of JSON file"""

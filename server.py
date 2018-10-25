@@ -15,11 +15,14 @@ resp = poing.post_up('http://127.0.0.1:5000', 'mnist_cnn.json')
 resp
 ^ will get dummy model"""
 dummy = False # sets up some fake shit, lmao
-local = True
+local = False
 if local:
     pypath = '/Users/ngundotra/anaconda3/envs/keras/bin/python'
 else:
-    pypath = '/sculptml-venv/bin/python'
+    # pypath = os.getcwd()
+    # print(os.listdir(pypath))
+    # pypath = os.path.join(pypath, 'sculptml-venv/bin/python')
+    pypath = 'python'
 
 
 @app.route('/')
@@ -99,6 +102,6 @@ else:
             with open(coreml_path, 'rb') as f:
                 data_dict['model'] = f.read()
             data_dict['ready'] = True
-        resp = Response(data_dict, 200, mimetype='application/json')
+        resp = Response(data_dict, 200)
         return resp
 
