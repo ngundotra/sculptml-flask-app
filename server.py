@@ -5,7 +5,7 @@ from os.path import exists
 from subprocess import Popen
 
 # This sets up the flask app to be run like so:
-# $ export FLASK_APP=hello.py
+# $ export FLASK_APP=server.py
 # $ flask run
 # If you're on windows lol here's a link: http://flask.pocoo.org/docs/1.0/quickstart/
 app = Flask(__name__)

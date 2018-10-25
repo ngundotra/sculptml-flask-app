@@ -58,7 +58,9 @@ def main(json_query):
             *.coremlmodel
     """
     print("Retrieving json...")
+    print(json_query)
     model_spec = get_json(json_query)
+    print(model_spec)
     print("Creating the model...")
     model = make_model(model_spec.get("model"))
     print(model.model.summary())

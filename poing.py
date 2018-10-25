@@ -7,7 +7,8 @@ def post_up(server, fname):
     if not isinstance(server, str) or not isinstance(fname, str):
         raise ValueError("fname and server should be strings")
     url = server + '/make-model'
-    resp = requests.post(url, fname)
+    with open(fname, 'rb') as json_f:
+        resp = requests.post(url, json=json.load(json_f))
     return resp
     
 def get_model(server, model_name):
