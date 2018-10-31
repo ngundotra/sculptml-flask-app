@@ -1,6 +1,6 @@
 import flask
 from flask import Flask, send_file, Response, request
-import os, json, sys, requests
+import os, json, sys, requests, base64 
 from os.path import exists
 from subprocess import Popen
 
@@ -77,31 +77,41 @@ else:
         proc = Popen([pypath, 'main.py', json_fname])
         return Response("Request received", 200)
 
-    @app.route("/get-model", methods=['POST', 'GET'])
-    def get_model():
+    @app.route("/check-model", methods=['GET'])
+    def check_model():
         """
-        Checks for coreml model existence, and sends back in JSON if it exists
+        Checks for coreml model progress
         Accepts GET arg: {'model_name'}
         If the model is not ready then it will return
-        {'ready': False, 'model': None}
+        {'ready': 0, 'progress': [0,1)}
         If the model is ready, then the JSON looks like
-        {'ready': True, 'model': binary(coremlmodel)}
+        {'ready': 1, 'progres': 1}
         """
         # Load the model path
-        from main import get_json
-        if request.method == 'GET':
-            model_name = request.args['model_name']
-        if request.headers['Content-Type'] == 'application/json':
-            spec = get_json(request.json)
-            model_name = spec['model']['model_name']
-        coreml_path = 'saved-models/'+model_name+'/model.h5'
+        model_name = request.args['model_name']
+        coreml_location = 'saved-models/'+model_name
+        coreml_path = coreml_location + '/model.h5'
 
         # If the model exists, send it in json response
-        data_dict = {'ready': False, 'model': None}
+        data_dict = {'ready': 0, 'model_path': None}
+        if os.path.exists(coreml_path):
+            data_dict['progress'] = 1
+            data_dict['ready'] = 1 
+        return Response(json.dumps(data_dict), status=200, mimetype='application/json')
+
+    @app.route('/get-model', methods=["GET"])
+    def get_model():
+        """
+        Either sends back binary coremlmodel, or 404 not found
+        """
+        model_name = request.args['model_name']
+        coreml_location = 'saved-models/'+model_name
+        coreml_path = coreml_location + '/coremlmodel.mlmodel'
+
+        binary_model = None
         if os.path.exists(coreml_path):
             with open(coreml_path, 'rb') as f:
-                data_dict['model'] = f.read()
-            data_dict['ready'] = True
-        resp = Response(data_dict, 200)
-        return resp
-
+                binary_model = f.read()
+            return Response(binary_model, status=200, content_type='application/octet')
+        else:
+            return "Model not found", 404
