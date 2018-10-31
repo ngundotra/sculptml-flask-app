@@ -11,9 +11,10 @@ from subprocess import Popen
 app = Flask(__name__)
 """If dummy==True, then flask server *should* return coreml model,
 
-resp = poing.post_up('http://127.0.0.1:5000', 'mnist_cnn.json')
-resp
-^ will get dummy model"""
+local_server = 'http://127.0.0.1:5000'
+resp = poing.post_up(, 'mnist_cnn.json')
+resp = poing.get_model(')
+^ will get dummy mo"""
 dummy = False # sets up some fake shit, lmao
 local = False
 if local:

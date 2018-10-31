@@ -15,8 +15,21 @@ def get_model(server, model_name):
     """Asks for `model_name` at the /get-model endpoint
     
     e.g. get_model('http://127.0.0.1:5000', model_name_from_json('iris_spec.json'))
+
+    returns 404 not found if model not ready, or byte_data of the model (probably need to write to file first before using)
     """
     url = server + '/get-model'
+    resp = requests.get(url, params={'model_name': model_name})
+    return resp
+
+def check_model(server, model_name):
+    """Asks for progress update at the /check-model endpoint.
+    You should always check for model before GET-ing a model to avoid 404 errors
+
+    e.g. check_model('http://127.0.0.1:5000', model_name_from_json('iris_spec.json'))
+    returns {'ready': 0 or 1, 'progress': [0, 1]}
+    """
+    url = server + '/check-model'
     resp = requests.get(url, params={'model_name': model_name})
     return resp
 
