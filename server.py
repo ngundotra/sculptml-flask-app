@@ -5,11 +5,9 @@ from os.path import exists
 from subprocess import Popen
 
 # This sets up the flask app to be run like so:
-# $ export FLASK_APP=server.py
-# $ flask run
-# If you're on windows lol here's a link: http://flask.pocoo.org/docs/1.0/quickstart/
+# python server.py
+# This will run the server
 app = Flask(__name__)
-
 
 @app.route('/')
 def home():
@@ -67,3 +65,6 @@ def get_model():
         return Response(binary_model, status=200, content_type='application/octet')
     else:
         return "Model not found", 404
+
+if __name__ == '__main__':
+    app.host('0.0.0.0', port=5000)
