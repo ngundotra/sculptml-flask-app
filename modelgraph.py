@@ -111,9 +111,15 @@ class ModelGraph(object):
         self.dataset = dataset # Figured would be useful to have this
         self._compile_model(dataset)
         print("batch size: " + str(dataset.batch_size) + ", epochs: "+str(dataset.epochs))
-        hist = self.model.fit(dataset.train_data, dataset.train_labels, batch_size=dataset.batch_size, epochs=dataset.epochs)
-        self.train_acc = hist.history['acc']
-        self.test_acc = self.model.evaluate(dataset.test_data, dataset.test_labels, verbose=0)[1]
+        try: 
+            hist = self.model.fit(dataset.train_data, dataset.train_labels, batch_size=dataset.batch_size, epochs=dataset.epochs)
+            self.train_acc = hist.history['acc']
+            self.test_acc = self.model.evaluate(dataset.test_data, dataset.test_labels, verbose=0)[1]
+        except KeyboardInterrupt:
+            # KeyboardInterrupt == Ctrl-C == SIGINT == kill -2
+            print("Training has been killed.")
+            self.train_acc = 0
+            self.test_acc = 0
         return self.train_acc, self.test_acc
 
 

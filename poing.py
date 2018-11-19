@@ -43,8 +43,36 @@ def model_name_from_json(fname):
         spec = json.load(f)
     return spec['model']['model_name']
 
+def stop_training(server, model_name):
+    """Tells server to stop training a model with the given name"""
+    url = server + '/stop-model'
+    resp = requests.get(url, params={'model_name': model_name})
+    return resp
+
+# Testing suite
+def test_stop_model(server, fname, num_epochs=1000):
+    """
+    Loads a JSON, adjusts the number of epochs (to add time)
+    and then writes to 'tmp.json'. Asks server to train that model, 
+    then attempts to stop it
+    """
+    tmp_name = 'tmp.json'
+    with open(fname, 'rb') as f:
+        spec = json.load(f)
+    spec['dataset']['epochs'] = num_epochs
+    with open(tmp_name, 'wb') as f:
+        json.dump(spec, f)
+    train_resp = post_up(server, fname)
+    print("Training response:", train_resp.content)
+    print("Stop response:", stop_training(server, tmp_name).content)
+
 if __name__ == '__main__':
     url = 'http://127.0.0.1:5000'
-    fname = 'iris_spec.json'
+    fname = 'mnist_cnn.json'
     resp = post_up(url, fname)
-    print(resp)
+    # Stops the training of the model, & still leads to proper compilation of model
+    # to CoreML as expected
+    print("Training iris:", resp.content)
+    from time import sleep
+    sleep(8)
+    print("Stopping iris:", stop_training(url, model_name_from_json(fname)).content)
