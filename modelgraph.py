@@ -8,6 +8,10 @@ import keras
 from keras import Sequential, Model
 from datasets import Dataset
 import os
+from os.path import join, exists
+# from model_progress import Model_Progress
+import pickle
+import json
 from SPLayers import (
     DenseLyr,
     FlattenLyr,
@@ -103,19 +107,38 @@ class ModelGraph(object):
         self.model.compile(optimizer=self.opt,
                            loss=self.loss, metrics=self.metrics)
 
+    def create_progress_callback(self, total_epochs):
+        """
+        Create the progress loggin callbacks to dump the model progress into a json for checkmodel get requests
+        """
+        file_name = self.name + "_progress_log.json"
+        def write_json(d):
+            data = json.dumps(d)
+            with open(file_name,"w") as f:
+                f.write(data)
+        # write_json({"epoch": 0, "total_epochs": total_epochs})
+        return keras.callbacks.LambdaCallback(
+            on_epoch_end = lambda epoch, logs: write_json({**logs, "epoch" : epoch, "total_epochs" : total_epochs}),
+            on_train_end = lambda logs : os.remove(file_name)
+        )
+
     def train_on(self, dataset):
         """
         Compiles then trains model on the dataset using the options parsed from the JSON
         dataset is a Dataset object
         """
+
         self.dataset = dataset # Figured would be useful to have this
         self._compile_model(dataset)
+
         print("batch size: " + str(dataset.batch_size) + ", epochs: "+str(dataset.epochs))
-        hist = self.model.fit(dataset.train_data, dataset.train_labels, batch_size=dataset.batch_size, epochs=dataset.epochs)
+        progress_loggin_callback = self.create_progress_callback(dataset.epochs)
+
+        hist = self.model.fit(dataset.train_data, dataset.train_labels, batch_size=dataset.batch_size, epochs=dataset.epochs, 
+            callbacks= [progress_loggin_callback])
         self.train_acc = hist.history['acc']
         self.test_acc = self.model.evaluate(dataset.test_data, dataset.test_labels, verbose=0)[1]
         return self.train_acc, self.test_acc
-
 
     def save(self):
         """
@@ -128,7 +151,6 @@ class ModelGraph(object):
                     coremlmodel.coremlmodel
         """
         base = 'saved-models'
-        from os.path import join, exists
         if not exists(base):
             os.mkdir(base)
         self.savedir = join(base, self.name)

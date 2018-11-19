@@ -49,11 +49,11 @@
     },
     "dataset" : {
         "name" : "MNIST",
-        "batch_size" : 128,
+        "batch_size" : 32,
         "img_rows" : 28,
         "img_cols" : 28,
         "num_classes" : 10,
-        "epochs" : 1,
+        "epochs" : 5,
         "metrics" : ["accuracy"],
         "loss" : "mse"
     }

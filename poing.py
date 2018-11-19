@@ -30,7 +30,9 @@ def check_model(server, model_name):
     returns {'ready': 0 or 1, 'progress': [0, 1]}
     """
     url = server + '/check-model'
-    resp = requests.get(url, params={'model_name': model_name})
+    with open(fname, 'rb') as json_f:
+        file = json.load(json_f)
+    resp = requests.get(url, params={'model_name': file['model']['model_name']})
     return resp
 
 def get_model_local(fname):
@@ -45,6 +47,8 @@ def model_name_from_json(fname):
 
 if __name__ == '__main__':
     url = 'http://127.0.0.1:5000'
-    fname = 'iris_spec.json'
-    resp = post_up(url, fname)
-    print(resp)
+    fname = 'mnist_cnn.json'
+    # resp = post_up(url, fname)
+    # print(resp)
+    # resp2 = check_model(url, fname)
+    # print(resp2)
