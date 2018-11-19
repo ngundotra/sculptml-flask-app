@@ -3,7 +3,6 @@
         "__info__": "Mnist CNN model from keras-team examples",
         "model_name": "simple CNN",
         "num_layers": 8,
-        "loss" : "mse",
         "optimizer": "Adadelta",
         "input_layer": {
             "dim": "(28, 28, 1)"

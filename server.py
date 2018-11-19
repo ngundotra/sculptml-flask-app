@@ -1,13 +1,23 @@
 import flask
 from flask import Flask, send_file, Response, request
 import os, json, sys, requests, base64 
+from poing import model_name_from_json
 from os.path import exists
 from subprocess import Popen
+# PLEASE NOTE THAT ALL THESE COMMANDS ARE MEANT TO BE RUN FROM 
+# A VIRTUALENV WITH requirements.txt INSTALLED
+# This will insure that `python` maps to the right commands
+# Otherwise, all the Popen (subprocess-training & killing) calls will 100% break
 
 # This sets up the flask app to be run like so:
 # python server.py
 # This will run the server
 app = Flask(__name__)
+
+# This is a global variable that keeps track of 
+# the process training each model
+# proc_map['model_name'] = proc.pid
+proc_map = {}
 
 @app.route('/')
 def home():
@@ -24,7 +34,10 @@ def start_btc_process():
     json_fname = 'user_request.json'
     with open(json_fname, 'w') as f:
         f.write(json.dumps(json_dict))
+    model_name = model_name_from_json(json_fname)
     proc = Popen(["python", 'main.py', json_fname])
+    # Save PID with the model's name
+    proc_map[model_name] = proc.pid
     return Response("Request received", 200)
 
 @app.route("/check-model", methods=['GET'])
@@ -66,5 +79,20 @@ def get_model():
     else:
         return "Model not found", 404
 
+@app.route('/stop-model', methods=['GET'])
+def stop_model():
+    """
+    Tries to stop model with given name from being trained.
+    If the process cannot be found, 404 is thrown
+    """
+    model_name = request.args['model_name']
+    if model_name in proc_map.keys():
+        target_pid = proc_map[model_name]
+        kill_proc = Popen(["kill", "-2", str(target_pid)])
+        # Remove the PID from the map, so we don't accidentally kill other processes
+        proc_map.pop(model_name)
+        return "Model is being killed", 200
+    return "Process ID not found", 404
+    
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
