@@ -1,8 +1,8 @@
 import flask
 from flask import Flask, send_file, Response, request
-import os, json, sys, requests, base64 
+import os, json, sys, requests, base64, pickle
 from poing import model_name_from_json
-from os.path import exists
+from os.path import exists 
 from subprocess import Popen
 # PLEASE NOTE THAT ALL THESE COMMANDS ARE MEANT TO BE RUN FROM 
 # A VIRTUALENV WITH requirements.txt INSTALLED
@@ -10,6 +10,8 @@ from subprocess import Popen
 # Otherwise, all the Popen (subprocess-training & killing) calls will 100% break
 
 # This sets up the flask app to be run like so:
+# activate venv before running
+# source scultpml-venv/bin/activate
 # python server.py
 # This will run the server
 app = Flask(__name__)
@@ -54,12 +56,22 @@ def check_model():
     model_name = request.args['model_name']
     coreml_location = 'saved-models/'+model_name
     coreml_path = coreml_location + '/model.h5'
-
+    # path to progress file
+    prog_file = model_name + "_progress_log.json"
+   
     # If the model exists, send it in json response
     data_dict = {'ready': 0, 'model_path': None}
     if os.path.exists(coreml_path):
         data_dict['progress'] = 1
         data_dict['ready'] = 1 
+    elif os.path.exists(prog_file):
+        with open(prog_file,"r") as f:
+            logs = json.load(f)
+        data_dict['progress_info'] = logs
+    else:
+        print("model not ready")
+        data_dict['progress'] = 0
+        data_dict['ready'] = 0
     return Response(json.dumps(data_dict), status=200, mimetype='application/json')
 
 @app.route('/get-model', methods=["GET"])
@@ -94,5 +106,6 @@ def stop_model():
         return "Model is being killed", 200
     return "Process ID not found", 404
     
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

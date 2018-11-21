@@ -30,7 +30,9 @@ def check_model(server, model_name):
     returns {'ready': 0 or 1, 'progress': [0, 1]}
     """
     url = server + '/check-model'
-    resp = requests.get(url, params={'model_name': model_name})
+    with open(fname, 'rb') as json_f:
+        file = json.load(json_f)
+    resp = requests.get(url, params={'model_name': file['model']['model_name']})
     return resp
 
 def get_model_local(fname):
@@ -74,5 +76,8 @@ if __name__ == '__main__':
     # to CoreML as expected
     print("Training iris:", resp.content)
     from time import sleep
-    sleep(8)
+    sleep(4)
+    resp = check_model(url, fname)
+    print("Checking progress:", resp.content)
+    sleep(4)
     print("Stopping iris:", stop_training(url, model_name_from_json(fname)).content)
