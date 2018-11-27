@@ -94,7 +94,7 @@ class Conv2DLyr(SPModelLayer):
         get_arg = lambda arg, value: model_spec[arg] if model_spec.get(arg) else value
         self.filters = model_spec['filters']
         self.kernel_size = parse_tuple(model_spec['kernel_size'])
-        self.strides = parse_tuple(get_arg('strides', '(1,1)'))
+        self.strides = parse_tuple(get_arg('stride', '(1,1)'))
         self.padding = get_arg('padding', 'valid')
         self.data_format = get_arg('data_format', None)
         self.dilation_rate = parse_tuple(get_arg('dilation_rate', '(1,1)'))
@@ -133,8 +133,8 @@ class MaxPooling2DLyr(SPModelLayer):
         # specifies default argument if argument is not in json spec
         get_arg = lambda arg, value: model_spec[arg] if model_spec.get(arg) else value
 
-        self.pool_size = parse_tuple(get_arg('pool_size', '(2,2'))
-        self.strides = get_arg('strides', None)
+        self.pool_size = parse_tuple(get_arg('pool_size', '(2,2)'))
+        self.strides = get_arg('stride', None)
         self.padding = get_arg('padding', 'valid')
         self.data_format = get_arg('data_format', None)
         self.layer = MaxPooling2D(

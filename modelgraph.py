@@ -143,7 +143,7 @@ class ModelGraph(object):
             print("Training has been killed.")
             self.train_acc = 0
             self.test_acc = 0
-       return self.train_acc, self.test_acc
+        return self.train_acc, self.test_acc
 
     def save(self):
         """
