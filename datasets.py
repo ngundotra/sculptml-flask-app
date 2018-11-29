@@ -83,9 +83,9 @@ class MNISTDataset(Dataset):
     def __init__(self, data_json):
         Dataset.__init__(self, data_json)
         # Parse options
-        self.img_rows = data_json.get("img_rows")
-        self.img_cols = data_json.get("img_cols")
-        self.num_classes = data_json.get("num_classes")
+        self.img_rows = 28
+        self.img_cols = 28
+        num_classes = 10
         self.epochs = data_json.get("epochs")
         self.loss = keras.losses.categorical_crossentropy
         self.input_shape = [28, 28, 1]
@@ -112,8 +112,8 @@ class MNISTDataset(Dataset):
         print(x_test.shape[0], 'test samples')
 
         # convert class vectors to binary class matrices
-        y_train = keras.utils.to_categorical(y_train, self.num_classes)
-        y_test = keras.utils.to_categorical(y_test, self.num_classes)
+        y_train = keras.utils.to_categorical(y_train, num_classes)
+        y_test = keras.utils.to_categorical(y_test, num_classes)
 
         self.train_data = x_train
         self.train_labels = y_train
