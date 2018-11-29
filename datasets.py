@@ -32,6 +32,7 @@ class Dataset(ABC):
         self.batch_size = data_json.get("batch_size")  # Scalar
         self.input_shape = None  # Tuple
         self.output_shape = None # Tuple
+        # Loss should be hard coded, this is just a default
         self.loss = data_json["loss"]  # String that describes the Keras loss function e.g. "mse"
         self.metrics = data_json["metrics"]  # List of Keras strings for metrics
         self.train_data = None  # Should be a numpy array
@@ -52,6 +53,7 @@ class IrisDataset(Dataset):
         self.input_shape = [iris.data.shape[1]] # 4
         self.output_shape = [len(iris.target_names)] # 3
         self.epochs = data_json.get("epochs")
+        self.loss = keras.losses.categorical_crossentropy
 
         # Split the data into training and testing data
         self.train_data = iris.data[:int(len(iris.data) * self.data_split)]
