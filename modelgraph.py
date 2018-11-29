@@ -145,7 +145,7 @@ class ModelGraph(object):
             self.train_acc = 0
             self.test_acc = 0
             self.finished = 0
-        return self.train_acc, self.test_acc
+        return self.train_acc, self.test_acc, self.finished
 
     def save(self):
         """
