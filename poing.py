@@ -2,6 +2,9 @@
 import requests
 import json
 
+CSUA_SERV = 'latte.csua.berkeley.edu:5000'
+LOCAL_SERV = 'http://127.0.0.1:5000'
+
 def post_up(server, fname):
     """Sends shit to the /make-model endpoint"""
     if not isinstance(server, str) or not isinstance(fname, str):
@@ -20,6 +23,14 @@ def get_model(server, model_name):
     """
     url = server + '/get-model'
     resp = requests.get(url, params={'model_name': model_name})
+    return resp
+
+def get_all(server):
+    """
+    Asks for all models, on the /get-all endpoint
+    """
+    url = server + '/get-all'
+    resp = requests.get(url)
     return resp
 
 def check_model(server, model_name):
