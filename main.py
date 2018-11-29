@@ -76,7 +76,7 @@ def main(json_query):
     print("Test accuracy is:", test_acc)
     train_info = {
         'train_acc': train_acc, 'test_acc': test_acc, 
-        'finished': did_finish, 'dataset': model_spec.dataset.name
+        'finished': did_finish, 'dataset': model.dataset.name
     }
     # Write the info to the train_info json
     with open(join(model.savedir, "train_info.json"), "wb") as f:
