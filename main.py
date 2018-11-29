@@ -80,7 +80,7 @@ def main(json_query):
     }
     # Write the info to the train_info json
     with open(join(model.savedir, "train_info.json"), "wb") as f:
-        json.dump(train_info, f)
+        f.write(json.dumps(train_info))
     # Write the model spec to 'user_request.json'
     with open(join(model.savedir, 'user_request.json'), 'w') as f:
         json.dump(model_spec, f)
