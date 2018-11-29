@@ -106,7 +106,7 @@ def get_all_models():
     models_info = {'num_models': len(model_names)}
     for i, model_dir in enumerate(model_names):
         cwd = os.path.join('saved-models/', model_dir)
-        sizemodel = os.stat(cwd, 'coremlmodel.mlmodel').st_size
+        sizemodel = os.stat(os.path.join(cwd, 'coremlmodel.mlmodel')).st_size
         with open(os.path.join(cwd, 'train_info.json'), 'r') as json_f:
             train_info = json.load(json_f)
         info = {

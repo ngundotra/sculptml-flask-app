@@ -2,7 +2,7 @@
 import requests
 import json
 
-CSUA_SERV = 'latte.csua.berkeley.edu:5000'
+CSUA_SERV = 'http://latte.csua.berkeley.edu:5000'
 LOCAL_SERV = 'http://127.0.0.1:5000'
 
 def post_up(server, fname):
