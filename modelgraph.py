@@ -138,11 +138,13 @@ class ModelGraph(object):
                 callbacks= [progress_loggin_callback])
             self.train_acc = hist.history['acc']
             self.test_acc = self.model.evaluate(dataset.test_data, dataset.test_labels, verbose=0)[1]
+            self.finished = 1
         except KeyboardInterrupt:
             # KeyboardInterrupt == Ctrl-C == SIGINT == kill -2
             print("Training has been killed.")
             self.train_acc = 0
             self.test_acc = 0
+            self.finished = 0
         return self.train_acc, self.test_acc
 
     def save(self):

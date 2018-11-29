@@ -27,9 +27,9 @@ def train_model(mg, spec_dict):
     Hands off compilation to shell script.
     """
     dataset = get_dataset(spec_dict["dataset"])
-    final_acc, test_acc = mg.train_on(dataset)
+    final_acc, test_acc, did_finish = mg.train_on(dataset)
     savedir = mg.save()
-    return final_acc, test_acc
+    return final_acc, test_acc, did_finish
 
 
 def compile_model(mg):
@@ -56,7 +56,13 @@ def main(json_query):
     saved-models/
         `model_name`/
             *.coremlmodel
+            # The user's JSON req
+            user_request.json
+            # The info on training (see below)
+            train_info.json
     """
+    from os.path import join
+
     print("Retrieving json...")
     print(json_query)
     model_spec = get_json(json_query)
@@ -65,11 +71,19 @@ def main(json_query):
     model = make_model(model_spec.get("model"))
     print(model.model.summary())
 
-    # get the dataset part of json
-    # dataset = get_dataset(model_spec.get("dataset"))
-    train_acc, test_acc = train_model(model, model_spec)
+    train_acc, test_acc, did_finish = train_model(model, model_spec)
     print("Train accuracy is:", train_acc)
     print("Test accuracy is:", test_acc)
+    train_info = {
+        'train_acc': train_acc, 'test_acc': test_acc, 
+        'finished': did_finish, 'dataset': model_spec.dataset.name
+    }
+    # Write the info to the train_info json
+    with open(join(model.savedir, "train_info.json"), "wb") as f:
+        json.dump(train_info, f)
+    # Write the model spec to 'user_request.json'
+    with open(join(model.savedir, 'user_request.json'), 'w') as f:
+        json.dump(model_spec, f)
 
     coreml_model = compile_model(model)
 

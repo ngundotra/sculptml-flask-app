@@ -33,7 +33,7 @@ def start_btc_process():
     """
     json_dict = request.get_json()
     print("Received JSON", file=sys.stderr)
-    json_fname = 'user_request.json'
+    json_fname = 'last_user_request.json'
     with open(json_fname, 'w') as f:
         f.write(json.dumps(json_dict))
     model_name = model_name_from_json(json_fname)
@@ -90,6 +90,35 @@ def get_model():
         return Response(binary_model, status=200, content_type='application/octet')
     else:
         return "Model not found", 404
+
+@app.route('/get-all', methods=['GET']) 
+def get_all_models():
+    """
+    Returns a JSON of # of models
+    & each model
+        name
+        dataset
+        size (of coremlmodel)
+        train acc
+        test acc
+    """
+    model_names = os.listdir('saved-models/')
+    models_info = {'num_models': len(model_names)}
+    for i, model_dir in enumerate(model_names):
+        cwd = os.path.join('saved-models/', model_dir)
+        sizemodel = os.stat(cwd, 'coremlmodel.mlmodel').st_size
+        with open(os.path.join(cwd, 'train_info.json'), 'r') as json_f:
+            train_info = json.load(json_f)
+        info = {
+            'name': model_dir,
+            'dataset': train_info.get('dataset'),
+            'size': sizemodel,
+            'train_acc': train_info.get('train_acc'),
+            'test_acc': train_info.get('test_acc')
+        }
+        models_info['model_'+str(i)] = info
+    return Response(json.dumps(models_info), status=200, mimetype='application/json')
+
 
 @app.route('/stop-model', methods=['GET'])
 def stop_model():

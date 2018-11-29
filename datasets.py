@@ -50,8 +50,8 @@ class IrisDataset(Dataset):
         # Parse your options from data_json
         # Do any loading that needs to be done here
         iris = datasets.load_iris()
-        self.input_shape = [iris.data.shape[1]] # 4
-        self.output_shape = [len(iris.target_names)] # 3
+        self.input_shape = [iris.data.shape[1]] # features size is 4
+        self.output_shape = [len(iris.target_names)] # number of classes is 3
         self.epochs = data_json.get("epochs")
         self.loss = keras.losses.categorical_crossentropy
 
