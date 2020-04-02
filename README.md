@@ -31,4 +31,4 @@ Then you can activate the virtual environment with `source activate sculptml-fla
 
 ## Contributions
 
-Thank you to Newman Hu, Allen Chen, Candace Chiang, and Riley Shanahan for their time, thoughts, and enthusiasm on this project.
+Thank you to Newman Hu, Allen Chen, Candace Chiang, and Riley Shanahan for their time, thoughts, and enthusiasm on this project. On the overall SculptML project, big shoutout to coleader Felipe, and the rest of the client team: Alex Chan and Sai Mandava.
