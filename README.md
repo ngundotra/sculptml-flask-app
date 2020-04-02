@@ -27,3 +27,8 @@ And we return JSON containing the CoreML binary as well as additional informatio
 To run the code, create a virtual environment called `sculptml-venv` in the `sculptml-flask-app` directory, and `pip install -r sculptml-flask-app/requirements`. 
 
 Then you can activate the virtual environment with `source activate sculptml-flask-app/sculptml-venv/bin/activate`. Finally, from the `sculptml-flask-app` folder, you can run a test of the backend on a input query JSON with `python main.py INPUT_QUERY.json`. If everything works properly, you should see your json copied to `user_request.json` and the `saved-models/` directory appear, with a CoreML model and Keras weights of your trained model. Note that this application works best if your server/computer actually has GPU support for Tensorflow/Keras (requires `pip install tensorflow-gpu`).
+
+
+## Contributions
+
+Thank you to Newman Hu, Allen Chen, Candace Chiang, and Riley Shanahan for their time, thoughts, and enthusiasm on this project.
