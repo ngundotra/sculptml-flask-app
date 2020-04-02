@@ -1,46 +1,29 @@
-# QuickML - Backend
+# SculptML Flask App
 
-This is the library of tools needed to receive requests for building, training and compiling machine learning models to CoreML models for visualization and education purposes.
+This repo contains the code necessary to run the Flask server that handles the SculptML iOS app's HTTP requests.
 
-# HERES HOW TO RUN THE CODE
+## Summary
+The application takes in a JSON full of model & dataset info, and returns a JSON containing an Apple CoreML model along with corresponding meta information. 
 
-```python
-python main.py mnist_cnn.json # or 
-python main.py iris_spec.json
-```
+![FlaskSummary.png](FlaskSummary.png)
 
+## Flask Overview
 
+We used Flask to support a RESTful API that wraps 3 distinct stages of the backend. Our first stage parses the request for dataset info, then constructs and trains a model from the model specifications via Keras, and finally compresses the trained model using Apple's CoreML.
 
-The framework that will ultimately handle all requests can vary, maybe Python Flask, Node.js, even Scala Akka. This should be relatively simple: just building out endpoints
-for a simple RESTful API. Internally, calls will probably be routed to an AWS server to build + train + compile the ML models. The last step will be delivering the ML model
-to the client. One issue I've read about for transferring large files that need to be written to disk by a client is backpressure. Which is when the client writing to disk is
-slower than the rate of data transfer.
+![FlaskOverview](FlaskOverview.png)
 
-To handle this I've read Scala's Akka handles backpressure by doing some "reactive streaming" stuff.
+## Backend Internals
 
-## Framework I propose to handle this:
+We currently support 2 classification datasets: 
+* The UC Irvine Iris dataset which has 4 features describing different Iris species and 
+* The MNIST dataset of handwritten white digits on blackboard (28x28 pixels, grayscale)
 
-For networking requests: Node.js (for resume building) or Python Flask (for simplicity)
+And we return JSON containing the CoreML binary as well as additional information that the iOS app uses to use and store the model.
 
-For ML building + training + compiling: Python (TF) + shell code for compiling the CoreML code
+![Specifics](FlaskInternals.png)
 
-For CoreML transfer: Scala's Akka or something which takes into account a phone's limited ability to read in a CoreML model.
-__(Note that this part of the framework depends on the Cocoapods available to handle this)__
+# Running the Code
+To run the code, create a virtual environment called `sculptml-venv` in the `sculptml-flask-app` directory, and `pip install -r sculptml-flask-app/requirements`. 
 
-
-## ML Model Building + Training
-
-Python file should take in a JSON file location as an argument. There should be some 2-step process by which the Python app can communicate that 
-1) the model was built successfully, and 
-2) the model is done training, and 3) the model has been compiled.
-
-For now, we can just flush these updates to the stdout, and try to compress everything into 1 process.
-
-## Model Transferring
-
-We should see if there are any cocoapods that do this...
-
---- 
-# Contributions
-
-Thank you to Newman Hu, Allen Chen, Candace Chiang, and Riley Shanahan for their time, thoughts, and enthusiasm on this project.
+Then you can activate the virtual environment with `source activate sculptml-flask-app/sculptml-venv/bin/activate`. Finally, from the `sculptml-flask-app` folder, you can run a test of the backend on a input query JSON with `python main.py INPUT_QUERY.json`. If everything works properly, you should see your json copied to `user_request.json` and the `saved-models/` directory appear, with a CoreML model and Keras weights of your trained model. Note that this application works best if your server/computer actually has GPU support for Tensorflow/Keras (requires `pip install tensorflow-gpu`).
