@@ -39,3 +39,8 @@ For now, we can just flush these updates to the stdout, and try to compress ever
 ## Model Transferring
 
 We should see if there are any cocoapods that do this...
+
+--- 
+# Contributions
+
+Thank you to Newman Hu, Allen Chen, Candace Chiang, and Riley Shanahan for their time, thoughts, and enthusiasm on this project.
